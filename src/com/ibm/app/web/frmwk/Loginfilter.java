@@ -48,8 +48,8 @@ public class Loginfilter implements Filter {
 		if(request instanceof HttpServletRequest)
 		{
 			HttpServletRequest servletReq = (HttpServletRequest)request;
-			String userRole = (String)servletReq.getSession().getAttribute("user_role");
-			if(userRole!=null)
+			Object loggedDate = servletReq.getSession().getAttribute("LOGGED_IN_USER");
+			if(loggedDate!=null)
 			{
 				chain.doFilter(request, response);
 				redirectToLoginPage = false;
@@ -70,7 +70,7 @@ public class Loginfilter implements Filter {
 		// pass the request along the filter chain
 		if(redirectToLoginPage)
 		{
-			request.getRequestDispatcher("login.jsp").forward(request, response);
+			request.getRequestDispatcher("index.jsp").forward(request, response);
 		}
 	}
 

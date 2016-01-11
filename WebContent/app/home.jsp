@@ -20,10 +20,8 @@
     <![endif]-->
   </head>
   <body>
-    <h1>Login page</h1>
-	<form action="login.wss" method="post">
-		<input type="submit" value="Click to Log in"/>
-	</form>
+    <h1>Home page</h1>
+	
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="js/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
