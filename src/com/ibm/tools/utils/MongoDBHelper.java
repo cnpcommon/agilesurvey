@@ -1,5 +1,6 @@
 package com.ibm.tools.utils;
 
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -8,6 +9,8 @@ import org.bson.Document;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
 import com.mongodb.MongoClientURI;
+import com.mongodb.MongoCredential;
+import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
@@ -30,9 +33,17 @@ public class MongoDBHelper {
 			if (mongo == null) {
 				// We may need to change to VCAP_SERVICES
 				String dbUrl = LocalVCAPProperties
-						.getLocalProperty("mongodb.url");
-				MongoClientURI uri = new MongoClientURI(dbUrl,MongoClientOptions.builder().connectTimeout(500000));
-				mongo = new MongoClient(uri);
+						.getLocalProperty("mongodb.server");
+				int dbPort = Integer.parseInt(LocalVCAPProperties
+						.getLocalProperty("mongodb.server.port"));
+				
+				MongoCredential credential = MongoCredential.createCredential(
+						LocalVCAPProperties.getLocalProperty("mongodb.userid"),
+						LocalVCAPProperties.getLocalProperty("mongodb.dbname"),
+						LocalVCAPProperties.getLocalProperty("mongodb.pwd").toCharArray());
+				
+				ServerAddress srvrAddress = new ServerAddress(dbUrl,dbPort);
+				mongo = new MongoClient(Arrays.asList(srvrAddress),Arrays.asList(credential));
 				db = mongo.getDatabase(LocalVCAPProperties
 						.getLocalProperty("mongodb.dbname"));
 				System.out.println("DB Connection established : with " + dbUrl);

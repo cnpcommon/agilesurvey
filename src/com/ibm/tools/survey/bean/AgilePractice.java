@@ -9,6 +9,7 @@ public class AgilePractice {
 
 	private String type = TYPE ;
 	private String principleId;
+	private String practiceId;
 	private String shortName;
 	private String description;
 	private int displayOrder;
@@ -19,11 +20,12 @@ public class AgilePractice {
 		super();
 	}
 	
-	public AgilePractice(String principleId,String shortName, String description,
+	public AgilePractice(String principleId,String practiceId,String shortName, String description,
 			int displayOrder, String comment) {
 		super();
 		this.principleId = principleId;
 		this.shortName = shortName;
+		this.practiceId = practiceId;
 		this.description = description;
 		this.displayOrder = displayOrder;
 		this.comment = comment;
@@ -114,6 +116,20 @@ public class AgilePractice {
 	 */
 	public void setShortName(String shortName) {
 		this.shortName = shortName;
+	}
+
+	/**
+	 * @return the practiceId
+	 */
+	public String getPracticeId() {
+		return practiceId;
+	}
+
+	/**
+	 * @param practiceId the practiceId to set
+	 */
+	public void setPracticeId(String practiceId) {
+		this.practiceId = practiceId;
 	}
 	
 	
