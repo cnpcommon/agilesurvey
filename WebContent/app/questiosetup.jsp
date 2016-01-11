@@ -20,16 +20,38 @@
     <![endif]-->
   </head>
   <body>
-    
-    <div class="well">
-    <h1>Home page</h1>
+  	
+  	<div class="well">
+  	<h1>New  assessment </h1>
 	    <div class="panel panel-primary">
-	  		<div class="panel-heading panel-primary">Survey administrations for Iteration Manager</div>
-	  		<div class="panel-body">
-	  			<a href="loadAssesmentConfig.wss" class="btn btn-warning" role="button">Create a new assessment</a>
-	  		</div>
+	  	<div class="panel-heading panel-primary"><h4>Configure questions </h4></div>
+	  	<div class="panel-body">
+			<form class="form-horizontal" role="form" action="displayQuestionSetup.wss">
+				  <div class="form-group">
+				    <label class="control-label  col-sm-2" for="surveyName">Survey name</label>
+				    <div class="col-sm-10">
+				    <input type="text" class="form-control" id="surveyName" name="surveyName">
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <label class="control-label col-sm-2" for="releaseDate">Survey release date</label>
+				    <div class="col-sm-10">
+				    	<input type="text" class="form-control" id="releaseDate">
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <label class="control-label  col-sm-2" for="sqadList">Select squad</label>
+					    <div class="checkbox  col-sm-10">
+						  <label><input type="checkbox" value="sqad1" name="sqadList">Sqad 1</label>
+						</div>
+				  </div>
+				  <div class="col-sm-2">&nbsp;</div>
+				  <div class="col-sm-10"><button type="submit" class="btn btn-primary btn-lg">Continue</button></div>
+				  
+			</form>
 	  	</div>
-  	</div>
+		</div>
+	</div>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="js/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
