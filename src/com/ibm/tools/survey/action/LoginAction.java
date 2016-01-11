@@ -30,7 +30,7 @@ public class LoginAction implements WebActionHandler {
 		
 		MongoCollection<Document> collection =MongoDBHelper.getCollection("mscollection1");
 		 BasicDBObject whereQuery = new BasicDBObject();
-   	     whereQuery.put("emailId", "raghosh5@in.ibm.com");
+   	     whereQuery.put("emailId", email);
    	      
    	    Document cursorDoc = collection.find(whereQuery).first();
    	 
