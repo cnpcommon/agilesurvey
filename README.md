@@ -4,7 +4,7 @@
 
 ## Please use the following in your project setup to avoid any 
 ## workspace related issue.
-## Rename/Duplication existing JDK to "sdk" and use that in
+## Rename/Duplicate existing JDK to "sdk" and use that in
 ## eclipse environment.
 
 ---
