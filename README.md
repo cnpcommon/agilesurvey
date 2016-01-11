@@ -8,4 +8,3 @@ GIT HUB URL : https://github.com/cnpcommon/agilesurvey.git
 If you finging anying important for others to know. Please mention here.
 
 Bootstarp usage URL : http://getbootstrap.com/examples/theme/
-
