@@ -1,13 +1,14 @@
 package com.ibm.tools.survey.bean;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.bson.types.ObjectId;
 
-public class AssesmentDetails {
+public class AssesmentDetails implements Persistable{
 
-	private static final String TYPE="assesment_details";
+	public static final String TYPE="assesment_details";
 	private ObjectId _id;
 
 	private String type = TYPE ;
@@ -19,6 +20,7 @@ public class AssesmentDetails {
 	private String releaseDate;
 	private String comment;
 	private List<MaturityIndicator> indicators;
+	private long dateModified;
 	
 	public AssesmentDetails(long assessementId, String owenerId,
 			List<String> squadList, String name, String releaseDate,
@@ -31,6 +33,7 @@ public class AssesmentDetails {
 		this.releaseDate = releaseDate;
 		this.comment = comment;
 		this.indicators = new ArrayList<>(5);
+		this.dateModified = (new Date()).getTime();
 	}
 
 	/**
@@ -165,6 +168,20 @@ public class AssesmentDetails {
 	 */
 	public void addIndicators(MaturityIndicator indicator) {
 		this.indicators.add(indicator);
+	}
+
+	/**
+	 * @return the dateModified
+	 */
+	public long getDateModified() {
+		return dateModified;
+	}
+
+	/**
+	 * @param dateModified the dateModified to set
+	 */
+	public void setDateModified(long dateModified) {
+		this.dateModified = dateModified;
 	}
 	
 	

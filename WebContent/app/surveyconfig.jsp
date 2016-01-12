@@ -24,7 +24,7 @@
   	<div class="well">
   	<h1>New  assessment </h1>
 	    <div class="panel panel-primary">
-	  	<div class="panel-heading panel-primary"><h4>Configure survey </h4></div>
+	  	<div class="panel-heading panel-primary"><h5>Configure survey </h5></div>
 	  	<div class="panel-body">
 			<form class="form-horizontal" role="form" action="displayQuestionSetup.wss">
 				  <div class="form-group">
@@ -36,13 +36,20 @@
 				  <div class="form-group">
 				    <label class="control-label col-sm-2" for="releaseDate">Survey release date</label>
 				    <div class="col-sm-10">
-				    	<input type="text" class="form-control" id="releaseDate">
+				    	<input type="text" class="form-control" id="releaseDate" name="releaseDate">
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <label class="control-label col-sm-2" for="comment">Comment</label>
+				    <div class="col-sm-10">
+				    	<input type="text" class="form-control" id="comment" name="comment">
 				    </div>
 				  </div>
 				  <div class="form-group">
 				    <label class="control-label  col-sm-2" for="sqadList">Select squad</label>
 					    <div class="checkbox  col-sm-10">
-						  <label><input type="checkbox" value="sqad1" name="sqadList">Sqad 1</label>
+						  <label><input type="checkbox" value="squad1" name="sqadList">Squad 1</label>
+						  <label><input type="checkbox" value="squad2" name="sqadList">Squad 2</label>
 						</div>
 				  </div>
 				  <div class="col-sm-2">&nbsp;</div>
