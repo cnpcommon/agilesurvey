@@ -14,8 +14,6 @@ import com.ibm.tools.survey.bean.ApplicationConstants;
 import com.ibm.tools.survey.bean.UserDetails;
 import com.ibm.tools.utils.MongoDBHelper;
 import com.mongodb.BasicDBObject;
-import com.mongodb.DBCursor;
-import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 
 public class LoginAction implements WebActionHandler {

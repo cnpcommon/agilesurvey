@@ -1,7 +1,9 @@
 package com.ibm.tools.survey.action;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,23 +15,94 @@ import com.ibm.app.web.frmwk.annotations.RequestMapping;
 import com.ibm.app.web.frmwk.bean.ModelAndView;
 import com.ibm.app.web.frmwk.bean.ViewType;
 import com.ibm.tools.survey.bean.AssesmentDetails;
+import com.ibm.tools.survey.bean.MaturityIndicator;
 import com.ibm.tools.survey.bean.UserDetails;
 import com.ibm.tools.survey.dbaccess.CachedReferenceDataStore;
+import com.ibm.tools.survey.dbaccess.SurveyConfigDAO;
 
 public class AssessmentConfigAction implements WebActionHandler {
 
-	
+	private static final String INDICATORS_SESSION_KEY ="INDICATORS";
 	@RequestMapping("loadExistingQuestionConfig.wss")
 	public ModelAndView loadExistingQuestionConfig(HttpServletRequest request,
 			HttpServletResponse response) {
 		ModelAndView mvObject = new ModelAndView(ViewType.JSP_VIEW);
+		Gson serializer = new GsonBuilder().create();
+		mvObject.addModel("principleList", CachedReferenceDataStore.getPrinciples());
+		mvObject.addModel("practiceMap",serializer.toJson(CachedReferenceDataStore.getPrincipleToPracticeMap()));
+		mvObject.addModel("levelList", CachedReferenceDataStore.getLevels());
+		mvObject.setView("app/questionconfig.jsp");
+		return mvObject;
+	}
+	@RequestMapping("saveQuestionDetails.wss")
+	public ModelAndView saveQuestionDetails(HttpServletRequest request,
+			HttpServletResponse response) {
+		ModelAndView mvObject = new ModelAndView(ViewType.AJAX_VIEW);
+		//Build the indicator
+		String practice = request.getParameter("practice");
+		String principle = request.getParameter("principle");
+		int level = Integer.parseInt(request.getParameter("maturityLevel"));
+		String indicatorText = request.getParameter("maturityIndicator");
+		MaturityIndicator indicator = new MaturityIndicator(principle, practice, level, indicatorText, "Web added ..Input to be taken", 0);
+		if((new SurveyConfigDAO()).updateMaturityIndicator(indicator))
+		{
+			//if save succeeds then update the session object
+			List<MaturityIndicator> existingIndicators =(List<MaturityIndicator>) request.getSession().getAttribute(INDICATORS_SESSION_KEY);
+			existingIndicators.remove(indicator);
+			existingIndicators.add(indicator);
+			mvObject.setView("{ \"status\": 0 }");
+		}
+		else
+		{
+			mvObject.setView("{ \"status\": 1 }");
+		}
 
-		// TODO: Change the above item
-		mvObject.setView("app/questionConfig.jsp");
+		return mvObject;
+	}
+	@RequestMapping("getQuestionDetails.wss")
+	public ModelAndView getQuestionDetails(HttpServletRequest request,
+			HttpServletResponse response) {
+		ModelAndView mvObject = new ModelAndView(ViewType.AJAX_VIEW);
+		String practice = request.getParameter("practice");
+		String principle = request.getParameter("principle");
+		int level = Integer.parseInt(request.getParameter("maturityLevel"));
+		//Map<String,List<>>
+		Gson serializer = new GsonBuilder().create();
+
+		MaturityIndicator indicator = getExistingIndicator(principle, practice, level, request);
+		if(indicator==null)
+		{
+			mvObject.setView("{ \"status\": \"1\" }");
+		}
+		else
+		{
+			mvObject.setView("{ \"status\" :  \"0\" , \"payload\" : "+serializer.toJson(indicator)+"}");
+		}
 		return mvObject;
 	}
 	
-	
+	private MaturityIndicator getExistingIndicator(String principle,String practice,int level,HttpServletRequest request)
+	{
+		List<MaturityIndicator> existingIndicators =(List<MaturityIndicator>) request.getSession().getAttribute(INDICATORS_SESSION_KEY);
+		if(existingIndicators==null)
+		{
+			existingIndicators = loadIndicators();
+			request.getSession().setAttribute(INDICATORS_SESSION_KEY,existingIndicators);
+		}
+		int index= existingIndicators.indexOf(new MaturityIndicator(principle,practice,level));
+		return (index==-1? null: existingIndicators.get(index));
+		
+	}
+	private List<MaturityIndicator> loadIndicators()
+	{
+		List<MaturityIndicator> existingIndicators = (new SurveyConfigDAO()).getAllTypes(MaturityIndicator.TYPE, MaturityIndicator.class);
+		if(existingIndicators==null )
+		{
+			existingIndicators = new ArrayList<>();
+		}
+		return existingIndicators;
+				
+	}
 	@RequestMapping("loadAssesmentConfig.wss")
 	public ModelAndView loadConfig(HttpServletRequest request,
 			HttpServletResponse response) {

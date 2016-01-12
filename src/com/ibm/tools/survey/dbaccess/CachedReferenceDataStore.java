@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.ibm.tools.survey.bean.AgilePractice;
 import com.ibm.tools.survey.bean.AgilePrinciple;
+
 import com.ibm.tools.survey.bean.MaturityLevel;
 
 public class CachedReferenceDataStore {
@@ -14,6 +15,7 @@ public class CachedReferenceDataStore {
 	private static List<AgilePrinciple> _agilePriciples = new ArrayList<>();
 	private static List<AgilePractice> _agilePractices = new ArrayList<>();
 	private static List<MaturityLevel> _levels= new ArrayList<>();
+	
 	private static Map<String,List<AgilePractice>> _principleToPracticeMap= new LinkedHashMap<>();
 	
 	
@@ -21,6 +23,7 @@ public class CachedReferenceDataStore {
 	{
 		super();
 	}
+	
 	public static List<MaturityLevel> getLevels()
 	{
 		if(_levels!=null && _levels.size()>0)

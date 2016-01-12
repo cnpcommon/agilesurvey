@@ -6,7 +6,7 @@ public class MaturityIndicator implements Persistable
 { 
 
 	
-	private static final String TYPE="maturity_indicator";
+	public  static final String TYPE="maturity_indicator";
 	private ObjectId _id;
 
 	private String type = TYPE ;
@@ -24,6 +24,14 @@ public class MaturityIndicator implements Persistable
 	}
 	
 	
+	public MaturityIndicator(String principle, String practice,int level) {
+		super();
+		this.level = level;
+		this.principle = principle;
+		this.practice = practice;
+	}
+
+
 	public MaturityIndicator(String principle, String practice, int level,
 			String indicatorText, String comment, int displayOrder) {
 		super();
@@ -155,6 +163,50 @@ public class MaturityIndicator implements Persistable
 	 */
 	public void setDisabled(boolean disabled) {
 		this.disabled = disabled;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + level;
+		result = prime * result
+				+ ((practice == null) ? 0 : practice.hashCode());
+		result = prime * result
+				+ ((principle == null) ? 0 : principle.hashCode());
+		return result;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		MaturityIndicator other = (MaturityIndicator) obj;
+		if (level != other.level)
+			return false;
+		if (practice == null) {
+			if (other.practice != null)
+				return false;
+		} else if (!practice.equals(other.practice))
+			return false;
+		if (principle == null) {
+			if (other.principle != null)
+				return false;
+		} else if (!principle.equals(other.principle))
+			return false;
+		return true;
 	}
 	
 	

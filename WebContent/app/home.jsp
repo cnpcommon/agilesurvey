@@ -38,6 +38,8 @@
 	  		<div class="panel-heading panel-primary">Survey administrations for Iteration Manager</div>
 	  		<div class="panel-body">
 	  			<a href="loadAssesmentConfig.wss" class="btn btn-warning" role="button">Create a new assessment</a>
+	  			<a href="loadExistingQuestionConfig.wss" class="btn btn-warning" role="button">Configure questions</a>
+	  			
 	  		</div>
 	  	</div>
   	</div>

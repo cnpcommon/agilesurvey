@@ -55,11 +55,7 @@
 </div>
 </form>
 	<!-- script references -->
-<<<<<<< HEAD
-		<script src="/jquery-1.11.1.min.js"></script>
-=======
-		<script src="js/jquery.min.js"></script>
->>>>>>> 820caefc208bfa74de5683ce4c765917164785cf
-		<script src="js/bootstrap.min.js"></script>
-	</body>
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+</body>
 </html>
