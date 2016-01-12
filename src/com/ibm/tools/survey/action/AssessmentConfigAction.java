@@ -19,6 +19,16 @@ import com.ibm.tools.survey.dbaccess.CachedReferenceDataStore;
 public class AssessmentConfigAction implements WebActionHandler {
 
 	
+	@RequestMapping("loadExistingQuestionConfig.wss")
+	public ModelAndView loadExistingQuestionConfig(HttpServletRequest request,
+			HttpServletResponse response) {
+		ModelAndView mvObject = new ModelAndView(ViewType.JSP_VIEW);
+
+		// TODO: Change the above item
+		mvObject.setView("app/questionConfig.jsp");
+		return mvObject;
+	}
+	
 	
 	@RequestMapping("loadAssesmentConfig.wss")
 	public ModelAndView loadConfig(HttpServletRequest request,
