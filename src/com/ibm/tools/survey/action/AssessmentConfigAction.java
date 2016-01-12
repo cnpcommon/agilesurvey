@@ -6,6 +6,8 @@ import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.ibm.app.web.frmwk.WebActionHandler;
 import com.ibm.app.web.frmwk.annotations.RequestMapping;
 import com.ibm.app.web.frmwk.bean.ModelAndView;
@@ -16,6 +18,8 @@ import com.ibm.tools.survey.dbaccess.CachedReferenceDataStore;
 
 public class AssessmentConfigAction implements WebActionHandler {
 
+	
+	
 	@RequestMapping("loadAssesmentConfig.wss")
 	public ModelAndView loadConfig(HttpServletRequest request,
 			HttpServletResponse response) {
@@ -30,12 +34,14 @@ public class AssessmentConfigAction implements WebActionHandler {
 	public ModelAndView laodQuestionSetup(HttpServletRequest request,
 			HttpServletResponse response) {
 		ModelAndView mvObject = new ModelAndView(ViewType.JSP_VIEW);
-
+		Gson serializer = new GsonBuilder().create();
 		AssesmentDetails assesmentDetails = buildNewAssesment(request);
 		// TODO : Validation
 		request.getSession().setAttribute("__NEW_ASSESMENT", assesmentDetails);
 		mvObject.addModel("assesmentDetails", assesmentDetails);
 		mvObject.addModel("principleList", CachedReferenceDataStore.getPrinciples());
+		mvObject.addModel("practiceMap",serializer.toJson(CachedReferenceDataStore.getPrincipleToPracticeMap()));
+		mvObject.addModel("levelList", CachedReferenceDataStore.getLevels());
 		mvObject.setView("app/questionsetup.jsp");
 		return mvObject;
 	}

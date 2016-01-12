@@ -26,7 +26,7 @@
 	    <div class="panel panel-primary">
 	  	<div class="panel-heading panel-primary"><h5>Configure survey </h5></div>
 	  	<div class="panel-body">
-			<form class="form-horizontal" role="form" action="displayQuestionSetup.wss">
+			<form class="form-horizontal" role="form" action="displayQuestionSetup.wss" method="post">
 				  <div class="form-group">
 				    <label class="control-label  col-sm-2" for="surveyName">Survey name</label>
 				    <div class="col-sm-10">

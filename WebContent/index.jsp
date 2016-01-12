@@ -7,7 +7,7 @@
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 		<meta charset="utf-8">
-		<title>Agile Maturity Assesment Survey Tool</title>
+		<title>Agile Maturity Assessment Survey Tool</title>
 		<meta name="generator" content="Bootply" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 		<link href="css/bootstrap.min.css" rel="stylesheet">
@@ -24,7 +24,6 @@
   <div class="modal-dialog">
   <div class="modal-content">
       <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
           <h1 class="text-center">Login</h1>
       </div>
       
@@ -49,7 +48,6 @@
       </div>
       <div class="modal-footer">
           <div class="col-md-12">
-          <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
 		  </div>	
       </div>
   </div>
@@ -57,7 +55,11 @@
 </div>
 </form>
 	<!-- script references -->
+<<<<<<< HEAD
 		<script src="/jquery-1.11.1.min.js"></script>
+=======
+		<script src="js/jquery.min.js"></script>
+>>>>>>> 820caefc208bfa74de5683ce4c765917164785cf
 		<script src="js/bootstrap.min.js"></script>
 	</body>
 </html>
