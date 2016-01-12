@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 
 import org.bson.Document;
 
+import com.mongodb.DBCollection;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
 import com.mongodb.MongoClientURI;
@@ -27,16 +28,17 @@ public class MongoDBHelper {
 	private static MongoClient mongo;
 	private static boolean isInitialized = false;
 	private static MongoDatabase db;
+	private static String collection;
 
 	private static boolean init() {
 		try {
 			if (mongo == null) {
 				// We may need to change to VCAP_SERVICES
-				String dbUrl = LocalVCAPProperties
-						.getLocalProperty("mongodb.server");
+				String dbUrl = LocalVCAPProperties.getLocalProperty("mongodb.server");
+				collection =  LocalVCAPProperties.getLocalProperty("mongodb.dbname.dbcollection");
 				int dbPort = Integer.parseInt(LocalVCAPProperties
 						.getLocalProperty("mongodb.server.port"));
-				
+
 				MongoCredential credential = MongoCredential.createCredential(
 						LocalVCAPProperties.getLocalProperty("mongodb.userid"),
 						LocalVCAPProperties.getLocalProperty("mongodb.dbname"),
@@ -46,6 +48,7 @@ public class MongoDBHelper {
 				mongo = new MongoClient(Arrays.asList(srvrAddress),Arrays.asList(credential));
 				db = mongo.getDatabase(LocalVCAPProperties
 						.getLocalProperty("mongodb.dbname"));
+				
 				System.out.println("DB Connection established : with " + dbUrl);
 			}
 			isInitialized = true;
@@ -57,10 +60,10 @@ public class MongoDBHelper {
 		return isInitialized;
 	}
 
-	public static MongoCollection<Document> getCollection(String collectionName) {
+	public static MongoCollection<Document> getCollection() {
 
 		if (init()) {
-			return db.getCollection(collectionName);
+			return db.getCollection(collection);
 		} else {
 			return null;
 		}

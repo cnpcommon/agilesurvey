@@ -23,7 +23,7 @@ public class MobileFrameworkHelperTest {
 	@Test
 	public void testDB()
 	{
-		MongoCollection<Document> myCollection = MongoDBHelper.getCollection("test");
+		MongoCollection<Document> myCollection = MongoDBHelper.getCollection();
 		//UserDetails userDetails = new UserDetails();
 		//userDetails.setEmailId("Sudip@gamil.com");
 		

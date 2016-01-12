@@ -30,7 +30,7 @@ public class SurveyConfigDAO {
 	private static final Gson GSON_SERIALIZER = new GsonBuilder().create();
 	public <T extends Persistable> List<T> getAllTypes(String type,Class<T> clz)
 	{
-		MongoCollection<Document>  collection = MongoDBHelper.getCollection(COLLECTION_NAME);
+		MongoCollection<Document>  collection = MongoDBHelper.getCollection();
 		List<Document> docs = collection.find(eq("type", type)).into(new ArrayList<Document>());
 		if(docs!=null && docs.size()>0)
 		{
@@ -51,7 +51,7 @@ public class SurveyConfigDAO {
 	{
 		boolean isSucess = false;
 		try{
-			MongoCollection<Document>  collection = MongoDBHelper.getCollection(COLLECTION_NAME);
+			MongoCollection<Document>  collection = MongoDBHelper.getCollection();
 			if(listofObjects!=null && listofObjects.size()>0)
 			{
 				List<Document> docs = new ArrayList<>(listofObjects.size());

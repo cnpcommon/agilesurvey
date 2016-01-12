@@ -35,7 +35,7 @@ class MongoConnect
         DB d=m.getDB("msurvey1");
 
         // get the collection mycollection in sample
-        DBCollection collection = d.getCollection("mscollection1");
+        DBCollection collection = d.getCollection("survey_data");
 
 
 

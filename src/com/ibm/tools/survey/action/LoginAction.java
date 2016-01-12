@@ -28,7 +28,7 @@ public class LoginAction implements WebActionHandler {
 		String email = request.getParameter("Email");
 		String password = request.getParameter("Password");
 		
-		MongoCollection<Document> collection =MongoDBHelper.getCollection("mscollection1");
+		 MongoCollection<Document> collection =MongoDBHelper.getCollection();
 		 BasicDBObject whereQuery = new BasicDBObject();
    	     whereQuery.put("emailId", email);
    	      
