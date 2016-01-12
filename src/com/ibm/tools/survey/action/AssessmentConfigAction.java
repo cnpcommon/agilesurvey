@@ -46,6 +46,8 @@ public class AssessmentConfigAction implements WebActionHandler {
 		return mvObject;
 	}
 
+	@RequestMapping("displayQuestionSetup.wss")
+	
 	private AssesmentDetails buildNewAssesment(HttpServletRequest request) {
 		String surveyName = request.getParameter("surveyName");
 		String releaseDate = request.getParameter("releaseDate");

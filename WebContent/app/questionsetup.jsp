@@ -27,7 +27,7 @@
 	    <div class="panel panel-primary">
 	  	<div class="panel-heading panel-primary"><h5>Configure questions </h5></div>
 	  	<div class="panel-body">
-			<form class="form-horizontal" role="form" action="displayQuestionSetup.wss">
+			<form class="form-horizontal" role="form" action="submitQuestionSetup.wss" id="questionDetailsFrm">
 				  <div class="form-group">
 				    <label class="control-label col-sm-2" >Survey name</label>
 				    <label class="control-label col-sm-2 alert-info" style="text-align:left;">${assesmentDetails.name}</label>
@@ -109,8 +109,12 @@
     		var level = $("#maturityLevel option:selected").val();
     		var leveIndicator = $("#maturityIndicator").val();
     		//Validate
-    		var dataToSave = {"princliple": principle , "practice":practice ,"maturityLevel": level ,"leveIndicator" : leveIndicator };
+    		//var dataToSave = {"princliple": principle , "practice":practice ,"maturityLevel": level ,"leveIndicator" : leveIndicator };
     		//POST BY AJAX
+    		
+    		$.post( "test.php", $( "#questionDetailsFrm" ).serialize() ).done(function(data){
+    			console.log("Saved data "+data);
+    		});
     		
     	});
     	$("#principle").change(function(){
