@@ -10,19 +10,12 @@ class MongoConnect
     {
     	Gson gson = new Gson();
     	UserDetails ud = new UserDetails();
-    	ud.setDisplayName("Raja");
-    	ud.setEmailId("raghosh5@in.ibm.com");
-    	ud.setPassword("raja123");
+    	ud.setDisplayName("Sudip");
+    	ud.setEmailId("sudtt1@in.ibm.com");
+    	ud.setPassword("12345");
     	ud.setRole("tribe");
-    	 String jsonsting  = gson.toJson(ud);
-    	 DBObject dbObject = (DBObject) JSON.parse(jsonsting);
-		 // System.out.println("JSON string "+jsonsting);
-    	 
-    	//DB URL : ds041140.mongolab.com:41140/msurvey1 
-        // The text uri
-        // "mongodb://xyz:MyPass_XYZ@ds023288.mongolab.com:23288/sample";
-        // Give the url of your database by replacing
-        // xyz with your username and MyPass_XYZ with your password
+    	String jsonsting  = gson.toJson(ud);
+    	DBObject dbObject = (DBObject) JSON.parse(jsonsting);
         String textUri = "mongodb://cnpcommon:cnp4test@ds041140.mongolab.com:41140/msurvey1";
 
         // Create MongoClientURI object from which you get MongoClient obj
@@ -37,14 +30,12 @@ class MongoConnect
         // get the collection mycollection in sample
         DBCollection collection = d.getCollection("survey_data");
 
-
-
         // Insert that object into the collection
         collection.insert(dbObject);
         
         
         BasicDBObject whereQuery = new BasicDBObject();
-   	     whereQuery.put("emailId", "raghosh5@in.ibm.com");
+   	     whereQuery.put("emailId", "sudtt1@in.ibm.com");
    	      
    	    DBCursor cursorDoc = collection.find(whereQuery);
         

@@ -1,3 +1,6 @@
+<%@page language="java"
+	contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>  
 <!DOCTYPE html>
 <html lang="en">
 
@@ -26,9 +29,12 @@
       </div>
       
       <div class="modal-body">
-       <div class="form-group">
-          <label class="control-label" for="inputError">${loginError}</label>
-          </div>
+	       <c:if test="${not empty loginError}" >       
+	            <div class="alert alert-danger fade in">
+                     <a href="#" class="close" data-dismiss="alert">&times;</a>
+                     <strong>Error!</strong> ${loginError}
+                </div>
+	       </c:if>     
             <div class="form-group">
               <input type="text" class="form-control input-lg" name="Email" placeholder="Email">
             </div>
@@ -51,7 +57,7 @@
 </div>
 </form>
 	<!-- script references -->
-		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+		<script src="/jquery-1.11.1.min.js"></script>
 		<script src="js/bootstrap.min.js"></script>
 	</body>
 </html>

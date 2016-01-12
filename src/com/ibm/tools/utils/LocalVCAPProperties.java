@@ -50,6 +50,8 @@ public class LocalVCAPProperties {
 		return _isInitialized;
 	}
 
+	
+	
 	/**
 	 * Returns the property value if exists in WEB-INF/local_vcap.properties
 	 * 
