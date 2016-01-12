@@ -2,9 +2,9 @@ package com.ibm.tools.survey.bean;
 
 import org.bson.types.ObjectId;
 
-public class AgilePractice {
+public class AgilePractice implements Persistable{
 
-	private static final String TYPE="agile_practice";
+	public static final String TYPE="agile_practice";
 	private ObjectId _id;
 
 	private String type = TYPE ;
@@ -14,6 +14,7 @@ public class AgilePractice {
 	private String description;
 	private int displayOrder;
 	private String comment;
+	private boolean disabled;
 	
 	public AgilePractice()
 	{
@@ -130,6 +131,20 @@ public class AgilePractice {
 	 */
 	public void setPracticeId(String practiceId) {
 		this.practiceId = practiceId;
+	}
+
+	/**
+	 * @return the disabled
+	 */
+	public boolean isDisabled() {
+		return disabled;
+	}
+
+	/**
+	 * @param disabled the disabled to set
+	 */
+	public void setDisabled(boolean disabled) {
+		this.disabled = disabled;
 	}
 	
 	

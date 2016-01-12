@@ -2,10 +2,10 @@ package com.ibm.tools.survey.bean;
 
 import org.bson.types.ObjectId;
 
-public class MaturityLevel {
+public class MaturityLevel implements Persistable{
 
 	
-	private static final String TYPE="maturity_level";
+	public static final String TYPE="maturity_level";
 	private ObjectId _id;
 
 	private String type = TYPE ;
@@ -13,6 +13,7 @@ public class MaturityLevel {
 	private String name;
 	private String comment;
 	private int displayOrder;
+	private boolean disabled;
 	
 	public MaturityLevel()
 	{
@@ -98,6 +99,20 @@ public class MaturityLevel {
 	 */
 	public void setDisplayOrder(int displayOrder) {
 		this.displayOrder = displayOrder;
+	}
+
+	/**
+	 * @return the disabled
+	 */
+	public boolean isDisabled() {
+		return disabled;
+	}
+
+	/**
+	 * @param disabled the disabled to set
+	 */
+	public void setDisabled(boolean disabled) {
+		this.disabled = disabled;
 	}
 	
 	
