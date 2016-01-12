@@ -30,12 +30,9 @@ public class SurveyConfigDAO {
 
 	public <T extends Persistable> List<T> getAllTypes(String type,Class<T> clz)
 	{
-<<<<<<< HEAD
-		MongoCollection<Document>  collection = MongoDBHelper.getCollection();
-=======
+
 		
 		MongoCollection<Document>  collection = MongoDBHelper.getCollection(COLLECTION_NAME);
->>>>>>> 820caefc208bfa74de5683ce4c765917164785cf
 		List<Document> docs = collection.find(eq("type", type)).into(new ArrayList<Document>());
 		if(docs!=null && docs.size()>0)
 		{

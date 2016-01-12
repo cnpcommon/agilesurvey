@@ -11,13 +11,8 @@ class MongoConnect
     	Gson gson = new Gson();
     	UserDetails ud = new UserDetails();
     	ud.setDisplayName("Sudip");
-<<<<<<< HEAD
-    	ud.setEmailId("sudtt1@in.ibm.com");
-    	ud.setPassword("12345");
-=======
     	ud.setEmailId("suddutt1@in.ibm.com");
     	ud.setPassword("cnp4test");
->>>>>>> 820caefc208bfa74de5683ce4c765917164785cf
     	ud.setRole("tribe");
     	String jsonsting  = gson.toJson(ud);
     	DBObject dbObject = (DBObject) JSON.parse(jsonsting);
@@ -40,11 +35,8 @@ class MongoConnect
         
         
         BasicDBObject whereQuery = new BasicDBObject();
-<<<<<<< HEAD
-   	     whereQuery.put("emailId", "sudtt1@in.ibm.com");
-=======
+
    	     whereQuery.put("emailId", "suddutt1@in.ibm.com");
->>>>>>> 820caefc208bfa74de5683ce4c765917164785cf
    	      
    	    DBCursor cursorDoc = collection.find(whereQuery);
         

@@ -2,7 +2,8 @@ package com.ibm.tools.survey.bean;
 
 import org.bson.types.ObjectId;
 
-public class MaturityIndicator {
+public class MaturityIndicator implements Persistable
+{ 
 
 	
 	private static final String TYPE="maturity_indicator";
@@ -15,7 +16,7 @@ public class MaturityIndicator {
 	private int displayOrder;
 	private String principle;
 	private String practice;
-	
+	private boolean disabled;
 	
 	public MaturityIndicator()
 	{
@@ -138,6 +139,22 @@ public class MaturityIndicator {
 	 */
 	public void setPractice(String practice) {
 		this.practice = practice;
+	}
+
+
+	/**
+	 * @return the disabled
+	 */
+	public boolean isDisabled() {
+		return disabled;
+	}
+
+
+	/**
+	 * @param disabled the disabled to set
+	 */
+	public void setDisabled(boolean disabled) {
+		this.disabled = disabled;
 	}
 	
 	

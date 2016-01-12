@@ -69,5 +69,14 @@ public class MongoDBHelper {
 		}
 
 	}
+	public static MongoCollection<Document> getCollection(String collectionName) {
+
+		if (init()) {
+			return db.getCollection(collectionName);
+		} else {
+			return null;
+		}
+
+	}
 
 }
