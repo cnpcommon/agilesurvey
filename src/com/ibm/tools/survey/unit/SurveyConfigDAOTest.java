@@ -30,7 +30,7 @@ public class SurveyConfigDAOTest {
 		//assertEquals(true, daoObject.saveData(practiceList));
 		
 		List<MaturityLevel> maturityLevels =buildMaturityLevel();
-		assertEquals(true, daoObject.saveData(maturityLevels));
+		//assertEquals(true, daoObject.saveData(maturityLevels));
 				
 	}
 	@Test

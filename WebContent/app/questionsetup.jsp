@@ -60,8 +60,33 @@
 					    </select>
 				    </div>
 				  </div>
+				  <div class="form-group">
+				    <label class="control-label col-sm-2" >Practice Description</label>
+				    <label class="control-label col-sm-8" id="desc">Practice Description</label>
+				   </div> 
+				   <div class="form-group">
+				   	<label class="control-label col-sm-2" for="maturityLevel">Level Indicator </label>
+				   	<div class="col-sm-10">
+				    	<select class="form-control" id="maturityLevel" name="maturityLevel" >
+				    		<c:forEach items="${levelList}" var="levelDetails">
+				    			<c:if test="${levelDetails.level>0 }" >
+				    				<option value="${levelDetails.level}">${levelDetails.name}</option>
+				    			</c:if>
+				    		</c:forEach>
+					    </select>
+				    </div>
+				   </div>
+				    <div class="form-group">
+				   	<label class="control-label col-sm-2" for="maturityIndicator">Level Indicator Text </label>
+				   	<div class="col-sm-10">
+				    	<textarea class="form-control" rows="5" id="maturityIndicator" name="maturityIndicator"></textarea>
+				    </div>
+				   </div>
 				  <div class="col-sm-2">&nbsp;</div>
-				  <div class="col-sm-10"><button type="submit" class="btn btn-primary btn-lg">Continue</button></div>
+				  <div class="col-sm-10">
+				  	<button type="button" class="btn btn-default btn-lg" id="saveBtn">Save</button>
+				  	<button type="submit" class="btn btn-primary btn-lg">Submit and create survey</button>
+				  </div>
 				  
 			</form>
 	  	</div>
@@ -73,18 +98,34 @@
     <script src="js/bootstrap.min.js"></script>
     
     <script type="text/javascript">
-    var practiceMap = "";
+    var practiceMap = ${practiceMap};
     $(document).ready(function(){
     	console.log("On load");
+    	$("#saveBtn").click(function(){
+    		//Validate the inputs 
+    		console.log("On save");
+    		var principle = $("#principle option:selected").val();
+    		var practice = $("#practice option:selected").val();
+    		var level = $("#maturityLevel option:selected").val();
+    		var leveIndicator = $("#maturityIndicator").val();
+    		//Validate
+    		var dataToSave = {"princliple": principle , "practice":practice ,"maturityLevel": level ,"leveIndicator" : leveIndicator };
+    		//POST BY AJAX
+    		
+    	});
     	$("#principle").change(function(){
     		var selected = $('#principle option:selected').val();
     		var listItem = "";
-    		for(var index=0;index<2;index++)
+    		var practiceList  = practiceMap[""+selected];
+    		console.log(practiceList);
+    		for(var index=0;index<practiceList.length;index++)
     		{
-    			listItem += "<option value=\" "+index+"\">"+selected+"</option>" ;
+    			var practiceDetails = practiceList[index];
+    			listItem += "<option value=\" "+practiceDetails.practiceId+"\">"+practiceDetails.shortName+"</option>" ;
     		}
     		 $("#practice").html(listItem);
     	});
+    	
     });
     </script>
   </body>

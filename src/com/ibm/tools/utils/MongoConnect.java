@@ -10,9 +10,9 @@ class MongoConnect
     {
     	Gson gson = new Gson();
     	UserDetails ud = new UserDetails();
-    	ud.setDisplayName("Raja");
-    	ud.setEmailId("raghosh5@in.ibm.com");
-    	ud.setPassword("raja123");
+    	ud.setDisplayName("Sudip");
+    	ud.setEmailId("suddutt1@in.ibm.com");
+    	ud.setPassword("cnp4test");
     	ud.setRole("tribe");
     	 String jsonsting  = gson.toJson(ud);
     	 DBObject dbObject = (DBObject) JSON.parse(jsonsting);
@@ -40,11 +40,11 @@ class MongoConnect
 
 
         // Insert that object into the collection
-        collection.insert(dbObject);
+        //collection.insert(dbObject);
         
         
         BasicDBObject whereQuery = new BasicDBObject();
-   	     whereQuery.put("emailId", "raghosh5@in.ibm.com");
+   	     whereQuery.put("emailId", "suddutt1@in.ibm.com");
    	      
    	    DBCursor cursorDoc = collection.find(whereQuery);
         

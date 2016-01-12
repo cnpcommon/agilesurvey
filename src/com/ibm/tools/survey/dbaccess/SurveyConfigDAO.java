@@ -27,17 +27,19 @@ public class SurveyConfigDAO {
 	private static final Logger LOGGER = Logger.getLogger(SurveyConfigDAO.class.getName());
 	
 	private static final String COLLECTION_NAME = "survey_data";
-	private static final Gson GSON_SERIALIZER = new GsonBuilder().create();
+
 	public <T extends Persistable> List<T> getAllTypes(String type,Class<T> clz)
 	{
+		
 		MongoCollection<Document>  collection = MongoDBHelper.getCollection(COLLECTION_NAME);
 		List<Document> docs = collection.find(eq("type", type)).into(new ArrayList<Document>());
 		if(docs!=null && docs.size()>0)
 		{
+			 Gson serializer = new GsonBuilder().create();
 			List<T> retList = new ArrayList<>();
 			for(Document doc: docs)
 			{
-				T dbObject = GSON_SERIALIZER.fromJson(doc.toJson(), clz);
+				T dbObject = serializer.fromJson(doc.toJson(), clz);
 				retList.add(dbObject);
 			}
 			return retList;
@@ -54,10 +56,11 @@ public class SurveyConfigDAO {
 			MongoCollection<Document>  collection = MongoDBHelper.getCollection(COLLECTION_NAME);
 			if(listofObjects!=null && listofObjects.size()>0)
 			{
+				Gson serializer = new GsonBuilder().create();
 				List<Document> docs = new ArrayList<>(listofObjects.size());
 				for(T obj: listofObjects)
 				{
-					docs.add(Document.parse(GSON_SERIALIZER.toJson(obj)));
+					docs.add(Document.parse(serializer.toJson(obj)));
 				}
 				collection.insertMany(docs);
 				isSucess = true;
