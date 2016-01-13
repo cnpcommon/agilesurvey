@@ -11,6 +11,7 @@ import org.junit.Test;
 import com.ibm.tools.survey.bean.AgilePractice;
 import com.ibm.tools.survey.bean.AgilePrinciple;
 import com.ibm.tools.survey.bean.MaturityLevel;
+import com.ibm.tools.survey.bean.Scores;
 import com.ibm.tools.survey.dbaccess.SurveyConfigDAO;
 
 public class SurveyConfigDAOTest {
@@ -29,8 +30,9 @@ public class SurveyConfigDAOTest {
 		//List<AgilePractice> practiceList =buildPractices();
 		//assertEquals(true, daoObject.saveData(practiceList));
 		
-		List<MaturityLevel> maturityLevels =buildMaturityLevel();
+		//List<MaturityLevel> maturityLevels =buildMaturityLevel();
 		//assertEquals(true, daoObject.saveData(maturityLevels));
+	
 				
 	}
 	@Test
@@ -95,5 +97,65 @@ public class SurveyConfigDAOTest {
 		levels.add(new MaturityLevel(-1, "Not applicable", "Manuallyy loaded", 6));
 		
 		return levels;
+	}
+	public List<Scores> buildScores()
+	{
+		List<Scores> scoreList = new ArrayList<Scores>();
+		scoreList.add(new Scores("097088", "cnp1", 12345l, 4, "1-1", "1"));
+		scoreList.add(new Scores("097088", "cnp1", 12345l, 3, "1-2", "1"));
+		scoreList.add(new Scores("097088", "cnp1", 12345l, 2, "1-1", "2"));
+		scoreList.add(new Scores("097088", "cnp1", 12345l, 1, "2-2", "2"));
+		scoreList.add(new Scores("097088", "cnp1", 12345l, 4, "3-1", "3"));
+		scoreList.add(new Scores("097088", "cnp1", 12345l, 2, "3-2", "3"));
+		scoreList.add(new Scores("097088", "cnp1", 12345l, 0, "3-3", "3"));
+		scoreList.add(new Scores("097088", "cnp1", 12345l, 2, "4-1", "4"));
+		scoreList.add(new Scores("097088", "cnp1", 12345l, 3, "5-1", "5"));
+		scoreList.add(new Scores("097088", "cnp1", 12345l, 4, "5-2", "5"));
+		scoreList.add(new Scores("097088", "cnp1", 12345l, 2, "5-3", "5"));
+		scoreList.add(new Scores("008867", "cnp1", 12345l, 2, "1-1", "1"));
+		scoreList.add(new Scores("008867", "cnp1", 12345l, 4, "1-2", "1"));
+		scoreList.add(new Scores("008867", "cnp1", 12345l, 3, "1-1", "2"));
+		scoreList.add(new Scores("008867", "cnp1", 12345l, 0, "2-2", "2"));
+		scoreList.add(new Scores("008867", "cnp1", 12345l, 2, "3-1", "3"));
+		scoreList.add(new Scores("008867", "cnp1", 12345l, 4, "3-2", "3"));
+		scoreList.add(new Scores("008867", "cnp1", 12345l, 1, "3-3", "3"));
+		scoreList.add(new Scores("008867", "cnp1", 12345l, 4, "4-1", "4"));
+		scoreList.add(new Scores("008867", "cnp1", 12345l, 0, "5-1", "5"));
+		scoreList.add(new Scores("008867", "cnp1", 12345l, 1, "5-2", "5"));
+		scoreList.add(new Scores("008867", "cnp1", 12345l, 3, "5-3", "5"));
+		scoreList.add(new Scores("00397U", "cnp1", 12345l, 4, "1-1", "1"));
+		scoreList.add(new Scores("00397U", "cnp1", 12345l, 2, "1-2", "1"));
+		scoreList.add(new Scores("00397U", "cnp1", 12345l, 1, "1-1", "2"));
+		scoreList.add(new Scores("00397U", "cnp1", 12345l, 3, "2-2", "2"));
+		scoreList.add(new Scores("00397U", "cnp1", 12345l, 1, "3-1", "3"));
+		scoreList.add(new Scores("00397U", "cnp1", 12345l, 2, "3-2", "3"));
+		scoreList.add(new Scores("00397U", "cnp1", 12345l, 4, "3-3", "3"));
+		scoreList.add(new Scores("00397U", "cnp1", 12345l, 3, "4-1", "4"));
+		scoreList.add(new Scores("00397U", "cnp1", 12345l, 2, "5-1", "5"));
+		scoreList.add(new Scores("00397U", "cnp1", 12345l, 2, "5-2", "5"));
+		scoreList.add(new Scores("00397U", "cnp1", 12345l, 4, "5-3", "5"));
+		scoreList.add(new Scores("566075", "esdw", 12345l, 4, "1-1", "1"));
+		scoreList.add(new Scores("566075", "esdw", 12345l, 2, "1-2", "1"));
+		scoreList.add(new Scores("566075", "esdw", 12345l, 1, "1-1", "2"));
+		scoreList.add(new Scores("566075", "esdw", 12345l, 3, "2-2", "2"));
+		scoreList.add(new Scores("566075", "esdw", 12345l, 1, "3-1", "3"));
+		scoreList.add(new Scores("566075", "esdw", 12345l, 2, "3-2", "3"));
+		scoreList.add(new Scores("566075", "esdw", 12345l, 4, "3-3", "3"));
+		scoreList.add(new Scores("566075", "esdw", 12345l, 3, "4-1", "4"));
+		scoreList.add(new Scores("566075", "esdw", 12345l, 2, "5-1", "5"));
+		scoreList.add(new Scores("566075", "esdw", 12345l, 2, "5-2", "5"));
+		scoreList.add(new Scores("566075", "esdw", 12345l, 4, "5-3", "5"));
+		scoreList.add(new Scores("0970SM", "esdw", 12345l, 4, "1-1", "1"));
+		scoreList.add(new Scores("0970SM", "esdw", 12345l, 3, "1-2", "1"));
+		scoreList.add(new Scores("0970SM", "esdw", 12345l, 2, "1-1", "2"));
+		scoreList.add(new Scores("0970SM", "esdw", 12345l, 1, "2-2", "2"));
+		scoreList.add(new Scores("0970SM", "esdw", 12345l, 4, "3-1", "3"));
+		scoreList.add(new Scores("0970SM", "esdw", 12345l, 2, "3-2", "3"));
+		scoreList.add(new Scores("0970SM", "esdw", 12345l, 0, "3-3", "3"));
+		scoreList.add(new Scores("0970SM", "esdw", 12345l, 2, "4-1", "4"));
+		scoreList.add(new Scores("0970SM", "esdw", 12345l, 3, "5-1", "5"));
+		scoreList.add(new Scores("0970SM", "esdw", 12345l, 4, "5-2", "5"));
+		scoreList.add(new Scores("0970SM", "esdw", 12345l, 2, "5-3", "5"));
+		return scoreList;
 	}
 }
