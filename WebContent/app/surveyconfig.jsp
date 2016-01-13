@@ -20,7 +20,7 @@
     <![endif]-->
   </head>
   <body>
-  	
+  	<%@include file="nav.html" %>
   	<div class="well">
   	<h1>New  Maturity Assessment  </h1>
   	<form class="form-horizontal" role="form" action="saveSuryvey.wss" method="post" id="surveyDetailsFrm" >
