@@ -4,11 +4,23 @@ package com.ibm.tools.survey.bean;
 //LOGGED_IN_USER 
 public class UserDetails {
 
+	public static final String TYPE="UserDetails";
 	private String emailId;
 	private String password;
 	private String displayName;
 	private String role;
+	private String type=TYPE;
 	
+	
+	
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
 	public UserDetails()
 	{
 		super();
