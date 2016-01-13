@@ -18,6 +18,7 @@ public class MaturityIndicator implements Persistable
 	private String practice;
 	private boolean disabled;
 	
+	
 	public MaturityIndicator()
 	{
 		super();

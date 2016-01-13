@@ -42,7 +42,7 @@ public class AssessmentConfigAction implements WebActionHandler {
 		String practice = request.getParameter("practice");
 		String principle = request.getParameter("principle");
 		int level = Integer.parseInt(request.getParameter("maturityLevel"));
-		String indicatorText = request.getParameter("maturityIndicator");
+		String indicatorText = request.getParameter("maturityIndicator"); 
 		MaturityIndicator indicator = new MaturityIndicator(principle, practice, level, indicatorText, "Web added ..Input to be taken", 0);
 		if((new SurveyConfigDAO()).updateMaturityIndicator(indicator))
 		{
@@ -50,11 +50,11 @@ public class AssessmentConfigAction implements WebActionHandler {
 			List<MaturityIndicator> existingIndicators =(List<MaturityIndicator>) request.getSession().getAttribute(INDICATORS_SESSION_KEY);
 			existingIndicators.remove(indicator);
 			existingIndicators.add(indicator);
-			mvObject.setView("{ \"status\": 0 }");
+			mvObject.setView("{ \"status\": \"0\" }");
 		}
 		else
 		{
-			mvObject.setView("{ \"status\": 1 }");
+			mvObject.setView("{ \"status\": \"1\" }");
 		}
 
 		return mvObject;
@@ -107,30 +107,17 @@ public class AssessmentConfigAction implements WebActionHandler {
 	public ModelAndView loadConfig(HttpServletRequest request,
 			HttpServletResponse response) {
 		ModelAndView mvObject = new ModelAndView(ViewType.JSP_VIEW);
-
+		Gson serializer = new GsonBuilder().create();
+		
 		// TODO: Change the above item
+		mvObject.addModel("principleList", CachedReferenceDataStore.getPrinciples());
+		mvObject.addModel("practiceMap",serializer.toJson(CachedReferenceDataStore.getPrincipleToPracticeMap()));
+		mvObject.addModel("levelList", CachedReferenceDataStore.getLevels());
+		
 		mvObject.setView("app/surveyconfig.jsp");
 		return mvObject;
 	}
 
-	@RequestMapping("displayQuestionSetup.wss")
-	public ModelAndView laodQuestionSetup(HttpServletRequest request,
-			HttpServletResponse response) {
-		ModelAndView mvObject = new ModelAndView(ViewType.JSP_VIEW);
-		Gson serializer = new GsonBuilder().create();
-		AssesmentDetails assesmentDetails = buildNewAssesment(request);
-		// TODO : Validation
-		request.getSession().setAttribute("__NEW_ASSESMENT", assesmentDetails);
-		mvObject.addModel("assesmentDetails", assesmentDetails);
-		mvObject.addModel("principleList", CachedReferenceDataStore.getPrinciples());
-		mvObject.addModel("practiceMap",serializer.toJson(CachedReferenceDataStore.getPrincipleToPracticeMap()));
-		mvObject.addModel("levelList", CachedReferenceDataStore.getLevels());
-		mvObject.setView("app/questionsetup.jsp");
-		return mvObject;
-	}
-
-	@RequestMapping("displayQuestionSetup.wss")
-	
 	private AssesmentDetails buildNewAssesment(HttpServletRequest request) {
 		String surveyName = request.getParameter("surveyName");
 		String releaseDate = request.getParameter("releaseDate");

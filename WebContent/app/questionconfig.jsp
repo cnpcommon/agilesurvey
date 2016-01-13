@@ -71,8 +71,7 @@
 				  <div class="col-sm-2">&nbsp;</div>
 				  <div class="col-sm-10">
 				  	<button type="button" class="btn btn-default btn-lg" id="saveBtn"  >Save</button>
-				  	<button type="submit" class="btn btn-primary btn-lg" id="updateBtn" >Update</button>
-				  	<button type="submit" class="btn btn-warning btn-lg" id="disableBtn" >Disable</button>
+				  	<button type="button" class="btn btn-warning btn-lg" id="disableBtn" >Disable</button>
 				  </div>
 				  
 			</form>
@@ -100,8 +99,9 @@
     		//POST BY AJAX
     		
     		 $.post( "saveQuestionDetails.wss", $( "#questionDetailsFrm" ).serialize() ).done(function(data){
-    			console.log("Saved data "+data);
-    			if(data.status==0)
+    			var serverResponse = eval("("+data+")");
+    			console.log("Saved data "+serverResponse);
+    			if(serverResponse.status==0)
     			{
     				console.log("Saved successfully");
     			}
@@ -123,28 +123,49 @@
     			listItem += "<option value=\" "+practiceDetails.practiceId+"\">"+practiceDetails.shortName+"</option>" ;
     		}
     		 $("#practice").html(listItem);
+	    	 $("#maturityIndicator").val("");
     	});
     	$("#practice").change(function(){
     		//on change of the practice 
     		//Try to load the exisitng data from table
-    		 $.get( "getQuestionDetails.wss", $( "#questionDetailsFrm" ).serialize() ).done(function(data){
-    			var serverResponse = eval("("+data+")");
-    			console.log("Existing data "+ serverResponse );
-    			if(serverResponse.status === "0")
-    			{
-    				console.log("Setting value");
-    				$("#maturityIndicator").val(serverResponse.payload.indicatorText);
-    			}
-    			else
-    			{
-    				//Cleam up 
-    				$("#maturityIndicator").val("");
-    			}
-    			
-    		}); 
+    		getExistingData();
+    		 
+    	});
+    	$("#maturityLevel").change(function(){
+    	
+    		getExistingData();
     	});
     	
     });
+    
+    function getExistingData()
+    {
+    	//Clean up the text
+    	$("#maturityIndicator").val("");
+    	var principle = $("#principle option:selected").val();
+    	var practice = $("#practice option:selected").val();
+    	var level = $("#maturityLevel option:selected").val();
+    	//If all 3 drop downs are selected
+    	if(principle !=  "" && practice!= "" && level !="")
+    	{
+	    	$.get( "getQuestionDetails.wss", $( "#questionDetailsFrm" ).serialize() ).done(function(data){
+	    			var serverResponse = eval("("+data+")");
+	    			console.log("Existing data "+ serverResponse );
+	    			if(serverResponse.status === "0")
+	    			{
+	    				console.log("Setting value");
+	    				$("#maturityIndicator").val(serverResponse.payload.indicatorText);
+	    			}
+	    			else
+	    			{
+	    				//Clean up 
+	    				$("#maturityIndicator").val("");
+	    			}
+	    			$("#maturityIndicator").focus();
+	    			
+	    		});
+    	} 
+    }
     </script>
   </body>
 </html>
