@@ -138,12 +138,13 @@ public class AssessmentConfigAction implements WebActionHandler {
 	public ModelAndView loadConfig(HttpServletRequest request,
 			HttpServletResponse response) {
 		ModelAndView mvObject = new ModelAndView(ViewType.JSP_VIEW);
-		Gson serializer = new GsonBuilder().create();
+		//Gson serializer = new GsonBuilder().create();
 		
 		// TODO: Change the above item
-		mvObject.addModel("principleList", CachedReferenceDataStore.getPrinciples());
-		mvObject.addModel("practiceMap",serializer.toJson(CachedReferenceDataStore.getPrincipleToPracticeMap()));
-		mvObject.addModel("levelList", CachedReferenceDataStore.getLevels());
+		mvObject.addModel("principleMap", CachedReferenceDataStore.getAgilePrinciplesMap());
+		mvObject.addModel("practiceMap",CachedReferenceDataStore.getAgilePracticeMap());
+		mvObject.addModel("levelMap", CachedReferenceDataStore.getLevelsMap());
+		mvObject.addModel("indicatorList", (new SurveyConfigDAO().getAllTypes(MaturityIndicator.TYPE, MaturityIndicator.class)));
 		
 		mvObject.setView("app/surveyconfig.jsp");
 		return mvObject;
