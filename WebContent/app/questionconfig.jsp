@@ -106,10 +106,13 @@
     				console.log("Saved successfully");
     				//Setting back the question id
     				$("#questionId").val(serverResponse.payload.questionid);
+    				//To show an alert
+    				$("#maturityLevel").focus();
     			}
     			else
     			{
     				console.log("Unable to save");
+    				$("#maturityIndicator").focus();
     			}
     		});
     		
@@ -118,7 +121,6 @@
     		var selected = $('#principle option:selected').val();
     		var listItem = "<option value=\"\" >Select practice</option>";
     		var practiceList  = practiceMap[""+selected];
-    		console.log(practiceList);
     		for(var index=0;index<practiceList.length;index++)
     		{
     			var practiceDetails = practiceList[index];

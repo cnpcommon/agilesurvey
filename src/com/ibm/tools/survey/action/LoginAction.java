@@ -61,8 +61,10 @@ public class LoginAction implements WebActionHandler {
 	   	     cursorDoc = collection.find(whereQuery).first();
 	   	     msUser = gson.fromJson(cursorDoc.toJson(),MaturityAssesmentUser.class );
 	   	     request.getSession().setAttribute("ITTERATION_MANAGER_INFO", msUser);
-			 */			 
-			mvObject.setView("app/newhome.jsp");
+			 			 
+			  mvObject.setView("app/newhome.jsp"); */
+			mvObject = new ModelAndView(ViewType.FORWARD_ACTION_VIEW);	
+			mvObject.setView("home.wss");
 			}else{
 				mvObject.addModel("loginError", "Invalid credentials");
 				mvObject.setView("/index.jsp");
