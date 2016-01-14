@@ -1,5 +1,6 @@
 <%@page language="java"
 	contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>     	
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -23,7 +24,8 @@
   	<%@include file="nav.html" %>
   	<div class="well">
   	<h1>New  Maturity Assessment  </h1>
-  	<form class="form-horizontal" role="form" action="saveSuryvey.wss" method="post" id="surveyDetailsFrm" >
+  	<form class="form-horizontal" role="form" action="saveAssesmentDetails.wss" method="post" id="surveyDetailsFrm" >
+  		<input type="hidden" name="assesmentId" value="" />
 	    <div class="panel panel-primary">
 	  		<div class="panel-heading panel-primary"><b>Assessment details </b></div>
 		  	<div class="panel-body">
@@ -52,8 +54,7 @@
 							  <label><input type="checkbox" value="squad2" name="sqadList">Squad 2</label>
 							</div>
 					  </div>
-					  <div class="col-sm-2">&nbsp;</div>
-					  <div class="col-sm-10"><button type="submit" class="btn btn-primary btn-lg">Continue</button></div>
+					 
 		  	</div><!--  End of panel body -->
 		</div>
 		<div class="panel panel-primary">
@@ -61,28 +62,112 @@
 		  	<div class="panel-body">
 		  		 <!--  Adding the questions in the collapsible accordian -->
 		  		 <div class="panel-group" id="accordion">
-		  		 	
-		  		 	<div class="panel panel-info"> <!--  Question panel -->
+		  		 
+		  		 	<c:forEach items="${indicatorList}" var="indicatorMap" >
+		  		 	<div class="panel panel-default">
+		  		 	 <!--  Question panel -->
 		  		 		<div class="panel-heading">
-		  		 			
 		  		 			<h4 class="panel-title">
-						        <input type="checkbox" name="aa" value="questionId"/> <a data-toggle="collapse" data-parent="#accordion" href="#questionId">Agile principle and practice name</a>
+						        <input type="checkbox" name="questionId" value="${indicatorMap.principleId}_${indicatorMap.practiceId}"/>
+						        <a data-toggle="collapse" data-parent="#accordion" href="#quid_${indicatorMap.principleId}_${indicatorMap.practiceId}"><c:out value="${principleMap[indicatorMap.principleId].description}"/> &nbsp; <c:out value="${practiceMap[indicatorMap.practiceId].shortName}" /></a>
 					        </h4>
 		  		 		</div>
-		  		 		<div id="questionId" class="panel-collapse collapse in">
+		  		 		<div id="quid_${indicatorMap.principleId}_${indicatorMap.practiceId}" class="panel-collapse collapse">
 						      <div class="panel-body">
-						      	Question content
+						      	
+						      		<c:forEach items="${levels}" var="level" >
+						      			<c:set var="levelValueStr">${level.level}</c:set>
+						      			<c:if test="${ (level.level > 0)  && ( indicatorMap.levelIndicatorMap[levelValueStr] != null ) }" >
+						      				<div class="panel-group">
+												<div class="panel panel-info">
+													<div class="panel-heading">
+													<h4 class="panel-title">
+														<a data-toggle="collapse" href="#${indicatorMap.levelIndicatorMap[levelValueStr].questionid}"><c:out value="${level.name}" /></a>
+													</h4>
+													</div>
+													<div id="${indicatorMap.levelIndicatorMap[levelValueStr].questionid}" class="panel-collapse collapse">
+														<div class="panel-body">
+															<c:out value="${indicatorMap.levelIndicatorMap[levelValueStr].indicatorText }" />
+														</div>
+													</div>
+												</div>
+											</div>
+						      			</c:if>
+						      		</c:forEach>
+						      		
+						      	
 						      </div>
     					</div>
 		  		 	</div>
-		  		 </div><!--  End of accordian -->
 		  		 	
+		  		 	</c:forEach>
+		  		 </div><!--  End of accordian -->
+		  		 <div class="col-sm-10">&nbsp;</div>
+				<div class="col-sm-2"><button type="button" class="btn btn-primary btn-lg" id="saveAndReleaseBtn">Save & Release</button></div>
 		  	</div>
 		 </div>
 	</form>
+	<div class="modal fade" id="alertModal" role="dialog">
+	    <div class="modal-dialog modal-sm">
+	      <div class="modal-content">
+	        <div class="modal-header">
+	          <h4 class="modal-title">Save status</h4>
+	        </div>
+	        <div class="modal-body">
+	          <p id="stausText"></p>
+	        </div>
+	        <div class="modal-footer">
+	          <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+	        </div>
+	      </div>
+	    </div>
+	</div>
+	</div>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="js/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="js/bootstrap.min.js"></script>
+    
+     <script type="text/javascript">
+     
+     	$(document).ready(function(){
+     	
+     		$("#saveAndReleaseBtn").click(function(){
+     			console.log("Save operation is on");
+     			//First do the validation
+     			if(validateForm())
+     			{
+     				$.post("saveAssesmentDetails.wss", $( "#surveyDetailsFrm" ).serialize()).done(function(data){
+     					var serverResponse = eval("("+ data+")");
+     					if(serverResponse.status=="0")
+     					{
+     						console.log("Save is successful");
+     					}
+     					else
+     					{
+     						console.log("Save is NOT successfull");
+     					}
+     				});
+     			}
+     			else
+     			{
+     				alert("Validation error");
+     			}
+     		});
+     	
+     	});
+     	function showMessage(message)
+     	{
+     		//Set the message 
+     		$("#stausText").html(message);
+     		//Show the modal window
+     		$("#alertModal").modal("show");
+     	}
+     	function validateForm()
+     	{
+     		//TODO: Form validation 
+     		return true;
+     	}
+     </script>
   </body>
 </html>
