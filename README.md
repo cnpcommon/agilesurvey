@@ -2,6 +2,12 @@
 
 ---
 
+## I have added a HomeAction class that implements home.wss. 
+## Please implement all the dash board related logic in the HomeAction class
+---
+
+---
+
 ## Please use the following in your project setup to avoid any 
 ## workspace related issue.
 ## Rename/Duplicate existing JDK to "sdk" and use that in
