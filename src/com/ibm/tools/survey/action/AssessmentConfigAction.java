@@ -3,7 +3,9 @@ package com.ibm.tools.survey.action;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -42,15 +44,16 @@ public class AssessmentConfigAction implements WebActionHandler {
 		String practice = request.getParameter("practice");
 		String principle = request.getParameter("principle");
 		int level = Integer.parseInt(request.getParameter("maturityLevel"));
+		String questionId = getSafeString(request.getParameter("questionId"));
 		String indicatorText = request.getParameter("maturityIndicator"); 
-		MaturityIndicator indicator = new MaturityIndicator(principle, practice, level, indicatorText, "Web added ..Input to be taken", 0);
+		MaturityIndicator indicator = new MaturityIndicator(principle, practice, level, indicatorText, "Web added ..Input to be taken", 0,questionId);
 		if((new SurveyConfigDAO()).updateMaturityIndicator(indicator))
 		{
+			Gson serializer = new GsonBuilder().create();
 			//if save succeeds then update the session object
-			List<MaturityIndicator> existingIndicators =(List<MaturityIndicator>) request.getSession().getAttribute(INDICATORS_SESSION_KEY);
-			existingIndicators.remove(indicator);
-			existingIndicators.add(indicator);
-			mvObject.setView("{ \"status\": \"0\" }");
+			Map<String,MaturityIndicator> indicatorMap =(Map<String,MaturityIndicator>) request.getSession().getAttribute(INDICATORS_SESSION_KEY);
+			indicatorMap.put(indicator.getQuestionid(),indicator);
+			mvObject.setView("{ \"status\": \"0\" , \"payload\" : "+serializer.toJson(indicator)+"}");
 		}
 		else
 		{
@@ -62,14 +65,22 @@ public class AssessmentConfigAction implements WebActionHandler {
 	@RequestMapping("getQuestionDetails.wss")
 	public ModelAndView getQuestionDetails(HttpServletRequest request,
 			HttpServletResponse response) {
+		MaturityIndicator indicator = null;
 		ModelAndView mvObject = new ModelAndView(ViewType.AJAX_VIEW);
 		String practice = request.getParameter("practice");
 		String principle = request.getParameter("principle");
 		int level = Integer.parseInt(request.getParameter("maturityLevel"));
+		String questionId = getSafeString(request.getParameter("questionId"));
 		//Map<String,List<>>
 		Gson serializer = new GsonBuilder().create();
-
-		MaturityIndicator indicator = getExistingIndicator(principle, practice, level, request);
+		if(questionId.length()>0)
+		{
+			indicator = getExistingIndicator(questionId, request);
+		}
+		else
+		{
+			indicator = getExistingIndicator(principle,practice,level, request);
+		}
 		if(indicator==null)
 		{
 			mvObject.setView("{ \"status\": \"1\" }");
@@ -80,27 +91,47 @@ public class AssessmentConfigAction implements WebActionHandler {
 		}
 		return mvObject;
 	}
-	
-	private MaturityIndicator getExistingIndicator(String principle,String practice,int level,HttpServletRequest request)
+	private MaturityIndicator getExistingIndicator(String principle,String practice,int level, HttpServletRequest request)
 	{
-		List<MaturityIndicator> existingIndicators =(List<MaturityIndicator>) request.getSession().getAttribute(INDICATORS_SESSION_KEY);
-		if(existingIndicators==null)
+		Map<String,MaturityIndicator> existingDataMap  =(Map<String,MaturityIndicator>) request.getSession().getAttribute(INDICATORS_SESSION_KEY);
+		if(existingDataMap==null)
 		{
-			existingIndicators = loadIndicators();
-			request.getSession().setAttribute(INDICATORS_SESSION_KEY,existingIndicators);
+			existingDataMap = loadIndicators();
+			request.getSession().setAttribute(INDICATORS_SESSION_KEY,existingDataMap);
 		}
-		int index= existingIndicators.indexOf(new MaturityIndicator(principle,practice,level));
-		return (index==-1? null: existingIndicators.get(index));
+		for(MaturityIndicator indicator: existingDataMap.values())
+		{
+			if(indicator.isMatching(principle, practice, level))
+			{
+				return indicator;
+			}
+		}
+		return null;
+	}
+	private MaturityIndicator getExistingIndicator(String questionId,HttpServletRequest request)
+	{
+		Map<String,MaturityIndicator> existingDataMap  =(Map<String,MaturityIndicator>) request.getSession().getAttribute(INDICATORS_SESSION_KEY);
+		if(existingDataMap==null)
+		{
+			existingDataMap = loadIndicators();
+			request.getSession().setAttribute(INDICATORS_SESSION_KEY,existingDataMap);
+		}
+		
+		return existingDataMap.get(questionId);
 		
 	}
-	private List<MaturityIndicator> loadIndicators()
+	private Map<String,MaturityIndicator> loadIndicators()
 	{
+		Map<String,MaturityIndicator> existingDataMap  = new LinkedHashMap<>();
 		List<MaturityIndicator> existingIndicators = (new SurveyConfigDAO()).getAllTypes(MaturityIndicator.TYPE, MaturityIndicator.class);
-		if(existingIndicators==null )
+		if(existingIndicators!=null )
 		{
-			existingIndicators = new ArrayList<>();
+			for(MaturityIndicator indicator: existingIndicators)
+			{
+				existingDataMap.put(indicator.getQuestionid(),indicator);
+			}
 		}
-		return existingIndicators;
+		return existingDataMap;
 				
 	}
 	@RequestMapping("loadAssesmentConfig.wss")
@@ -129,6 +160,11 @@ public class AssessmentConfigAction implements WebActionHandler {
 				(new Date()).getTime(), ownerId, Arrays.asList(squadList),
 				surveyName, releaseDate, comment);
 		return assesmentDetauls;
+	}
+	
+	private String getSafeString(String input)
+	{
+		return (input !=null ? input.trim(): "");
 	}
 
 }

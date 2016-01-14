@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import com.ibm.tools.survey.bean.AgilePractice;
 import com.ibm.tools.survey.bean.AgilePrinciple;
+import com.ibm.tools.survey.bean.MaturityIndicator;
 import com.ibm.tools.survey.bean.MaturityLevel;
 import com.ibm.tools.survey.dbaccess.SurveyConfigDAO;
 
@@ -22,6 +23,12 @@ public class SurveyConfigDAOTest {
 	}
 
 	@Test
+	public void testAdhoc()
+	{
+		daoObject.deleteDataAllType(MaturityIndicator.TYPE);
+		System.out.println(daoObject.getAllTypes(MaturityIndicator.TYPE, MaturityIndicator.class));
+	}
+	@Test
 	public void testInsertRefData() {
 		//Build agile principles;
 		//List<AgilePrinciple> principles = buildPrinciples();
@@ -29,7 +36,7 @@ public class SurveyConfigDAOTest {
 		//List<AgilePractice> practiceList =buildPractices();
 		//assertEquals(true, daoObject.saveData(practiceList));
 		
-		List<MaturityLevel> maturityLevels =buildMaturityLevel();
+		//List<MaturityLevel> maturityLevels =buildMaturityLevel();
 		//assertEquals(true, daoObject.saveData(maturityLevels));
 				
 	}
@@ -54,7 +61,7 @@ public class SurveyConfigDAOTest {
 		assertNotNull(principles);
 		
 	}
-	public List<AgilePractice> buildPractices()
+	private List<AgilePractice> buildPractices()
 	{
 		List<AgilePractice> pacticeList = new ArrayList<>();
 		pacticeList.add(new AgilePractice("1", "1_1", "Standups", "A regular team collaboration opportunity for sharing progress, identifying risks and resolving issues", 1, "Locaed maunally "));

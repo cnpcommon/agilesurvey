@@ -28,7 +28,7 @@
 	  	<div class="panel-heading panel-primary"><b>Configure questions </b></div>
 	  	<div class="panel-body">
 			<form class="form-horizontal" role="form" action="submitQuestionSetup.wss" id="questionDetailsFrm">
-				  <input type="hidden" name="indicatorId" id="indicatorId" value="" />
+				  <input type="hidden" name="questionId" id="questionId" value="" />
 				  <!--  Principles and practices -->
 				  <div class="form-group">
 				  	 <label class="control-label  col-sm-2" for="principle">Select Principle</label>
@@ -104,6 +104,8 @@
     			if(serverResponse.status==0)
     			{
     				console.log("Saved successfully");
+    				//Setting back the question id
+    				$("#questionId").val(serverResponse.payload.questionid);
     			}
     			else
     			{
@@ -124,6 +126,7 @@
     		}
     		 $("#practice").html(listItem);
 	    	 $("#maturityIndicator").val("");
+	    	 $("#questionId").val("");
     	});
     	$("#practice").change(function(){
     		//on change of the practice 
@@ -146,6 +149,7 @@
     	var practice = $("#practice option:selected").val();
     	var level = $("#maturityLevel option:selected").val();
     	//If all 3 drop downs are selected
+    	$("#questionId").val("");
     	if(principle !=  "" && practice!= "" && level !="")
     	{
 	    	$.get( "getQuestionDetails.wss", $( "#questionDetailsFrm" ).serialize() ).done(function(data){
@@ -155,11 +159,13 @@
 	    			{
 	    				console.log("Setting value");
 	    				$("#maturityIndicator").val(serverResponse.payload.indicatorText);
+	    				$("#questionId").val(serverResponse.payload.questionid)
 	    			}
 	    			else
 	    			{
 	    				//Clean up 
 	    				$("#maturityIndicator").val("");
+	    				$("#questionId").val("");
 	    			}
 	    			$("#maturityIndicator").focus();
 	    			
