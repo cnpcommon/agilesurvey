@@ -4,6 +4,7 @@ import static java.util.Arrays.asList;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -14,8 +15,10 @@ import com.google.gson.GsonBuilder;
 import com.ibm.tools.survey.bean.AssessmentResult;
 import com.ibm.tools.survey.bean.Scores;
 import com.ibm.tools.utils.MongoDBHelper;
+import com.mongodb.Block;
 import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 
 /**
  * DAO Class to access Score data
