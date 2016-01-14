@@ -17,6 +17,7 @@ public class MaturityIndicator implements Persistable
 	private String principle;
 	private String practice;
 	private boolean disabled;
+	private String questionid;
 	
 	
 	public MaturityIndicator()
@@ -42,6 +43,21 @@ public class MaturityIndicator implements Persistable
 		this.indicatorText = indicatorText;
 		this.comment = comment;
 		this.displayOrder = displayOrder;
+	}
+
+	
+
+	public MaturityIndicator(String principle, String practice, int level,
+			String indicatorText, String comment, int displayOrder,
+			String questionid) {
+		super();
+		this.principle = principle;
+		this.practice = practice;
+		this.level = level;
+		this.indicatorText = indicatorText;
+		this.comment = comment;
+		this.displayOrder = displayOrder;
+		this.questionid = questionid;
 	}
 
 
@@ -167,6 +183,22 @@ public class MaturityIndicator implements Persistable
 	}
 
 
+	/**
+	 * @return the questionid
+	 */
+	public String getQuestionid() {
+		return questionid;
+	}
+
+
+	/**
+	 * @param questionid the questionid to set
+	 */
+	public void setQuestionid(String questionid) {
+		this.questionid = questionid;
+	}
+
+
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
 	 */
@@ -174,11 +206,8 @@ public class MaturityIndicator implements Persistable
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + level;
 		result = prime * result
-				+ ((practice == null) ? 0 : practice.hashCode());
-		result = prime * result
-				+ ((principle == null) ? 0 : principle.hashCode());
+				+ ((questionid == null) ? 0 : questionid.hashCode());
 		return result;
 	}
 
@@ -195,20 +224,23 @@ public class MaturityIndicator implements Persistable
 		if (getClass() != obj.getClass())
 			return false;
 		MaturityIndicator other = (MaturityIndicator) obj;
-		if (level != other.level)
-			return false;
-		if (practice == null) {
-			if (other.practice != null)
+		if (questionid == null) {
+			if (other.questionid != null)
 				return false;
-		} else if (!practice.equals(other.practice))
-			return false;
-		if (principle == null) {
-			if (other.principle != null)
-				return false;
-		} else if (!principle.equals(other.principle))
+		} else if (!questionid.equals(other.questionid))
 			return false;
 		return true;
 	}
+
+
+	public boolean isMatching(String principle,String practice,int level)
+	{
+		String key_1 = principle+"_"+practice+"_"+String.valueOf(level);
+		String key_2 = this.principle+"_"+this.practice+"_"+String.valueOf(this.level);
+		return key_1.equals(key_2);
+	}
+	
+	
 	
 	
 }

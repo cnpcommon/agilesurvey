@@ -16,6 +16,7 @@ import com.ibm.tools.survey.bean.MaturityIndicator;
 import com.ibm.tools.survey.bean.Persistable;
 import com.ibm.tools.utils.MongoDBHelper;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.result.DeleteResult;
 
 /**
  * DAO Class to access survey config data
@@ -30,35 +31,40 @@ public class SurveyConfigDAO {
 
 	private static final String COLLECTION_NAME = "survey_data";
 
-	public boolean updateMaturityIndicator(final MaturityIndicator indicator) {
+	public boolean updateMaturityIndicator(MaturityIndicator indicator) {
 		// First search the indicators
 		boolean isSucces = false;
 		try {
 			MongoCollection<Document> collection = MongoDBHelper
 					.getCollection(COLLECTION_NAME);
-			Document existingDoc = collection.find(
-					and(eq("type", MaturityIndicator.TYPE),
-							eq("principle", indicator.getPrinciple()),
-							eq("practice", indicator.getPractice()),
-							eq("level", indicator.getLevel()))).first();
-			if (existingDoc == null) {
+			boolean isInsert = false;
+			if(getSafeString(indicator.getQuestionid())!=null )
+			{
+				Document existingDoc = collection.find(
+						and(eq("type", MaturityIndicator.TYPE),
+								eq("questionid", indicator.getQuestionid()))).first();
+				if (existingDoc == null) {
+					isInsert = true;
+				} else {
+					Document updatedDocument = new Document();
+					updatedDocument.put("disabled", indicator.isDisabled());
+					updatedDocument.put("displayOrder", indicator.getDisplayOrder());
+					updatedDocument.put("comment", indicator.getComment());
+					updatedDocument.put("indicatorText", indicator.getIndicatorText());
+					collection.updateOne(and(eq("type", MaturityIndicator.TYPE),
+							eq("questionid", indicator.getQuestionid())), new Document("$set", updatedDocument));
+
+				}
+			}
+			
+			if(isInsert)
+			{
 				Gson serializer = new GsonBuilder().create();
+				indicator.setQuestionid(String.valueOf(System.currentTimeMillis()));
 				collection.insertOne(Document.parse(serializer
 						.toJson(indicator)));
-			} else {
-				Document updatedDocument = new Document();
-				updatedDocument.put("disabled", indicator.isDisabled());
-				updatedDocument.put("displayOrder", indicator.getDisplayOrder());
-				updatedDocument.put("comment", indicator.getComment());
-				updatedDocument.put("indicatorText", indicator.getIndicatorText());
-				
-				collection.updateOne(and(eq("type", MaturityIndicator.TYPE),
-						eq("principle", indicator.getPrinciple()),
-						eq("practice", indicator.getPractice()),
-						eq("level", indicator.getLevel())), new Document("$set", updatedDocument));
-				
-				//collection.updateOne(existingDoc, existingDoc);
 			}
+			
 			isSucces = true;
 		} catch (Exception ex) {
 			LOGGER.log(Level.WARNING,
@@ -110,5 +116,18 @@ public class SurveyConfigDAO {
 		}
 		return isSucess;
 	}
-
+	
+	public  boolean deleteDataAllType(String type)
+	{
+		MongoCollection<Document> collection = MongoDBHelper
+				.getCollection();
+		collection.deleteMany(eq("type",type));
+		
+		return true;
+	}
+	
+	private String getSafeString(String input)
+	{
+		return (input !=null ? input.trim(): "");
+	}
 }

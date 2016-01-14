@@ -19,6 +19,7 @@ import com.ibm.tools.survey.bean.UserDetails;
 import com.ibm.tools.utils.MongoDBHelper;
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoCollection;
+import static com.mongodb.client.model.Filters.*;
 
 public class LoginAction implements WebActionHandler {
 	private Gson gson = new Gson();
@@ -37,12 +38,13 @@ public class LoginAction implements WebActionHandler {
 		
 		 collection =MongoDBHelper.getCollection();
 		 
-		 BasicDBObject andQuery = new BasicDBObject();
+		 
+		 /*BasicDBObject andQuery = new BasicDBObject();
 		 List<BasicDBObject> obj = new ArrayList<BasicDBObject>();
 		    obj.add(new BasicDBObject("type", "UserDetails"));
 		    obj.add(new BasicDBObject("emailId", email));
-		    andQuery.put("$and", obj);
-   	    cursorDoc = collection.find(andQuery).first();
+		    andQuery.put("$and", obj);*/
+   	    cursorDoc = collection.find(and(eq("type","UserDetails"),eq("emailId",email))).first();
    	 
    	    if(cursorDoc!=null){
 		
@@ -51,13 +53,18 @@ public class LoginAction implements WebActionHandler {
 			if(password!=null && password.equals(userDetails.getPassword())){
 			userDetails.setRole(ApplicationConstants.USER_ROLE_ITERATION_MGR);
 			request.getSession().setAttribute("LOGGED_IN_USER", userDetails);
-			 whereQuery = new BasicDBObject();
+			//Fllowing code was throwning exception 
+			//Hence suddutt1 commented it out
+			/*
+ 			 whereQuery = new BasicDBObject();
 	   	     whereQuery.put("id", userDetails.getEmailId());
 	   	     cursorDoc = collection.find(whereQuery).first();
 	   	     msUser = gson.fromJson(cursorDoc.toJson(),MaturityAssesmentUser.class );
 	   	     request.getSession().setAttribute("ITTERATION_MANAGER_INFO", msUser);
-			 
-			mvObject.setView("app/home.jsp");
+			 			 
+			  mvObject.setView("app/newhome.jsp"); */
+			mvObject = new ModelAndView(ViewType.FORWARD_ACTION_VIEW);	
+			mvObject.setView("home.wss");
 			}else{
 				mvObject.addModel("loginError", "Invalid credentials");
 				mvObject.setView("/index.jsp");
