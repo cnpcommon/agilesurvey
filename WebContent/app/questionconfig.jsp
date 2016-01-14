@@ -21,7 +21,7 @@
     <![endif]-->
   </head>
   <body>
-  	
+  	<%@include file="nav.html" %>
   	<div class="well">
   	<h1>Questions setup </h1>
 	    <div class="panel panel-primary">
