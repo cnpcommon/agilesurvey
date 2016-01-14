@@ -1,9 +1,5 @@
 package com.ibm.tools.survey.bean;
 
-import java.beans.Transient;
-import java.util.Map;
-
-import com.ibm.gsk.ikeyman.keystore.entry.Entry;
 import com.ibm.tools.survey.dbaccess.CachedReferenceDataStore;
 
 public class AssessmentResult {
