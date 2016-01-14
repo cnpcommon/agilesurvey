@@ -1,7 +1,9 @@
 package com.ibm.tools.survey.dbaccess;
 
+import static com.mongodb.client.model.Filters.and;
+import static com.mongodb.client.model.Filters.eq;
+
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -13,10 +15,7 @@ import com.google.gson.GsonBuilder;
 import com.ibm.tools.survey.bean.MaturityIndicator;
 import com.ibm.tools.survey.bean.Persistable;
 import com.ibm.tools.utils.MongoDBHelper;
-import com.mongodb.Block;
 import com.mongodb.client.MongoCollection;
-
-import static com.mongodb.client.model.Filters.*;
 
 /**
  * DAO Class to access survey config data

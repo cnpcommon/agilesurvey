@@ -17,6 +17,7 @@ public class CachedReferenceDataStore {
 	private static List<MaturityLevel> _levels= new ArrayList<>();
 	
 	private static Map<String,List<AgilePractice>> _principleToPracticeMap= new LinkedHashMap<>();
+	private static Map<String,String> _practiceIdtoNameMap=new LinkedHashMap<>();
 	
 	
 	private CachedReferenceDataStore()
@@ -79,6 +80,23 @@ public class CachedReferenceDataStore {
 				practiceList.add(practice);
 			}
 			return _principleToPracticeMap;
+		}
+		
+	}
+	public static Map<String,String> getPracticeIdtoNameMap()
+	{
+		if(_practiceIdtoNameMap!=null && _practiceIdtoNameMap.size()>0)
+		{
+			return _practiceIdtoNameMap;
+		}
+		else
+		{
+			for(AgilePractice practice: getPractices())
+			{
+				_practiceIdtoNameMap.put(practice.getPracticeId(), practice.getShortName());
+				//System.out.println("store in the map"+practice.getPracticeId()+practice.getShortName());
+			}
+			return _practiceIdtoNameMap;
 		}
 		
 	}
