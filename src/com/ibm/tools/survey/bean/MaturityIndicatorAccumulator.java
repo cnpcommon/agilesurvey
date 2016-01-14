@@ -30,5 +30,8 @@ public class MaturityIndicatorAccumulator {
 		
 		return new ArrayList<>(map.values());
 	}
-	
+	public Map<String,MaturityIndicatorInfoMap> getSavedMap()
+	{
+		return map;
+	}
 }

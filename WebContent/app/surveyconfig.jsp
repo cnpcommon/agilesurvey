@@ -107,6 +107,8 @@
 		  	</div>
 		 </div>
 	</form>
+	<form id="hidFrm" action="home.wss" method="post">
+	</form>
 	<div class="modal fade" id="alertModal" role="dialog">
 	    <div class="modal-dialog modal-sm">
 	      <div class="modal-content">
@@ -117,7 +119,7 @@
 	          <p id="stausText"></p>
 	        </div>
 	        <div class="modal-footer">
-	          <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+	          <button type="button" class="btn btn-info" data-dismiss="modal" id="modalCloseBtn">Close</button>
 	        </div>
 	      </div>
 	    </div>
@@ -129,29 +131,42 @@
     <script src="js/bootstrap.min.js"></script>
     
      <script type="text/javascript">
-     
+     	var error = false;
      	$(document).ready(function(){
      	
+     		$('#alertModal').on('hidden.bs.modal', function () {
+    				// do something
+    				if(!error)
+    				{
+    					//Go to home page
+    					$("#hidFrm").submit();
+    				}
+			});
      		$("#saveAndReleaseBtn").click(function(){
      			console.log("Save operation is on");
      			//First do the validation
      			if(validateForm())
      			{
+     				error = false;
      				$.post("saveAssesmentDetails.wss", $( "#surveyDetailsFrm" ).serialize()).done(function(data){
      					var serverResponse = eval("("+ data+")");
      					if(serverResponse.status=="0")
      					{
      						console.log("Save is successful");
+     						showMessage("Assesment is saved.")
      					}
      					else
      					{
+     						error = true;
      						console.log("Save is NOT successfull");
+     						showMessage("Assesment is not saved.")
      					}
      				});
      			}
      			else
      			{
-     				alert("Validation error");
+     				error = true;
+     				showMessage("Validation error");
      			}
      		});
      	

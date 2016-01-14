@@ -12,8 +12,10 @@ import org.bson.Document;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.ibm.tools.survey.bean.AssesmentDetails;
 import com.ibm.tools.survey.bean.MaturityIndicator;
 import com.ibm.tools.survey.bean.Persistable;
+import com.ibm.tools.survey.unit.AssesmentInsertJunit;
 import com.ibm.tools.utils.MongoDBHelper;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.result.DeleteResult;
@@ -31,6 +33,40 @@ public class SurveyConfigDAO {
 
 	private static final String COLLECTION_NAME = "survey_data";
 
+	
+	public boolean updateAssesmentDetails(AssesmentDetails assesment) {
+		// First search the indicators
+		boolean isSucces = false;
+		try {
+			Gson serializer = new GsonBuilder().create();
+			MongoCollection<Document> collection = MongoDBHelper
+					.getCollection(COLLECTION_NAME);
+			boolean isInsert = false;
+			
+				Document existingDoc = collection.find(
+						and(eq("type", AssesmentDetails.TYPE),
+								eq("assessementId", assesment.getAssessementId()))).first();
+				if (existingDoc == null) {
+					isInsert = true;
+				} else {
+					Document updatedDocument = Document.parse(serializer.toJson(assesment));
+					collection.updateOne(and(eq("type", AssesmentDetails.TYPE),
+							eq("assessementId", assesment.getAssessementId())), new Document("$set", updatedDocument));
+				}
+			if(isInsert)
+			{
+				collection.insertOne(Document.parse(serializer
+						.toJson(assesment)));
+			}
+			isSucces = true;
+		} catch (Exception ex) {
+			LOGGER.log(Level.WARNING,
+					"|SURVERY_CONFIG_DAO| Indicator save failure", ex);
+			isSucces = false;
+		}
+		return isSucces;
+	}
+	
 	public boolean updateMaturityIndicator(MaturityIndicator indicator) {
 		// First search the indicators
 		boolean isSucces = false;
