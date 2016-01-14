@@ -23,52 +23,21 @@
   <body>
   	<%@include file="nav.html" %>
   	<div class="well">
-  	<h1>New  Maturity Assessment  </h1>
-  	<form class="form-horizontal" role="form" action="saveAssesmentDetails.wss" method="post" id="surveyDetailsFrm" >
-  		<input type="hidden" name="assesmentId" value="" />
-	    <div class="panel panel-primary">
-	  		<div class="panel-heading panel-primary"><b>Assessment details </b></div>
-		  	<div class="panel-body">
-					  <div class="form-group">
-					    <label class="control-label  col-sm-2" for="surveyName">Survey name</label>
-					    <div class="col-sm-10">
-					    <input type="text" class="form-control" id="surveyName" name="surveyName">
-					    </div>
-					  </div>
-					  <div class="form-group">
-					    <label class="control-label col-sm-2" for="releaseDate">Survey release date</label>
-					    <div class="col-sm-10">
-					    	<input type="text" class="form-control" id="releaseDate" name="releaseDate">
-					    </div>
-					  </div>
-					  <div class="form-group">
-					    <label class="control-label col-sm-2" for="comment">Comment</label>
-					    <div class="col-sm-10">
-					    	<input type="text" class="form-control" id="comment" name="comment">
-					    </div>
-					  </div>
-					  <div class="form-group">
-					    <label class="control-label  col-sm-2" for="sqadList">Select squad</label>
-						    <div class="checkbox  col-sm-10">
-							  <label><input type="checkbox" value="esdw" name="sqadList">ESDW</label>
-							  <label><input type="checkbox" value="cnp1" name="sqadList">CNP1</label>
-							</div>
-					  </div>
-					 
-		  	</div><!--  End of panel body -->
-		</div>
+  	<h1>Maturity Assessment ${assesment.name} dated ${assesment.releaseDate}  </h1>
+  	<form class="form-horizontal" role="form" action="saveAssesment.wss" method="post" id="surveyDetailsFrm" >
+  		<input type="hidden" name="assesmentId" value="${assesment.assessementId}" />
+	   
 		<div class="panel panel-primary">
-	  		<div class="panel-heading panel-primary"><b>Questions setup </b> <span class="label label-warning">0 Selected</span></div>
+	  		<div class="panel-heading panel-primary"><b>Survey Questions </b> <span class="label label-warning" id="status">0 Selected</span></div>
 		  	<div class="panel-body">
 		  		 <!--  Adding the questions in the collapsible accordian -->
 		  		 <div class="panel-group" id="accordion">
 		  		 
-		  		 	<c:forEach items="${indicatorList}" var="indicatorMap" >
+		  		 	<c:forEach items="${assesment.indicatorMap}" var="indicatorMap" >
 		  		 	<div class="panel panel-default">
 		  		 	 <!--  Question panel -->
 		  		 		<div class="panel-heading">
 		  		 			<h4 class="panel-title">
-						        <input type="checkbox" name="questionId" value="${indicatorMap.principleId}_${indicatorMap.practiceId}"/>
 						        <a data-toggle="collapse" data-parent="#accordion" href="#quid_${indicatorMap.principleId}_${indicatorMap.practiceId}"><c:out value="${principleMap[indicatorMap.principleId].description}"/> &nbsp; <c:out value="${practiceMap[indicatorMap.practiceId].shortName}" /></a>
 					        </h4>
 		  		 		</div>
@@ -83,9 +52,10 @@
 													<div class="panel-heading">
 													<h4 class="panel-title">
 														<a data-toggle="collapse" href="#${indicatorMap.levelIndicatorMap[levelValueStr].questionid}"><c:out value="${level.name}" /></a>
+														<input type="radio" name="${indicatorMap.principleId}_${indicatorMap.practiceId}" value="${level.level}" class="pull-right" />
 													</h4>
 													</div>
-													<div id="${indicatorMap.levelIndicatorMap[levelValueStr].questionid}" class="panel-collapse collapse">
+													<div id="${indicatorMap.levelIndicatorMap[levelValueStr].questionid}" class="panel-collapse collapse in">
 														<div class="panel-body">
 															<c:out value="${indicatorMap.levelIndicatorMap[levelValueStr].indicatorText }" />
 														</div>

@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import com.ibm.tools.survey.bean.AgilePractice;
 import com.ibm.tools.survey.bean.AgilePrinciple;
+import com.ibm.tools.survey.bean.AssesmentDetails;
 import com.ibm.tools.survey.bean.MaturityIndicator;
 import com.ibm.tools.survey.bean.MaturityLevel;
 import com.ibm.tools.survey.bean.Scores;
@@ -24,12 +25,18 @@ public class SurveyConfigDAOTest {
 	}
 
 	@Test
+	public void testGetAssessmentDetails()
+	{
+		AssesmentDetails assesmentDetails = daoObject.getAssessmentDetails("rajupara@in.ibm.com");
+		assertNotNull(assesmentDetails);
+	}
+	//@Test
 	public void testAdhoc()
 	{
 		daoObject.deleteDataAllType(MaturityIndicator.TYPE);
 		System.out.println(daoObject.getAllTypes(MaturityIndicator.TYPE, MaturityIndicator.class));
 	}
-	@Test
+	//@Test
 	public void testInsertRefData() {
 		//Build agile principles;
 		//List<AgilePrinciple> principles = buildPrinciples();
@@ -42,21 +49,21 @@ public class SurveyConfigDAOTest {
 	
 				
 	}
-	@Test
+	//@Test
 	public void testGetMaturityLevels() {
 		//Retrieve agile practices
 		List<MaturityLevel> maturityLevels = daoObject.getAllTypes(MaturityLevel.TYPE, MaturityLevel.class);
 		assertNotNull(maturityLevels);
 		
 	}
-	@Test
+	//@Test
 	public void testGetAgilePractices() {
 		//Retrieve agile practices
 		List<AgilePractice> principles = daoObject.getAllTypes(AgilePractice.TYPE, AgilePractice.class);
 		assertNotNull(principles);
 		
 	}
-	@Test
+	//@Test
 	public void testGetAgilePrinciples() {
 		//Build agile principles;
 		List<AgilePrinciple> principles = daoObject.getAllTypes(AgilePrinciple.TYPE, AgilePrinciple.class);

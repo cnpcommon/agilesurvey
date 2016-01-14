@@ -1,5 +1,6 @@
 package com.ibm.tools.survey.bean;
 
+import java.util.Date;
 import java.util.List;
 
 import org.bson.types.ObjectId;
@@ -11,14 +12,14 @@ public class AssesmentDetails implements Persistable{
 
 	private String type = TYPE ;
 	
-	private long assessementId;
+	private String assessementId;
 	private String owenerId;
 	private List<String> squadList;
 	private String name;
 	private String releaseDate;
 	private String comment;
 	private List<MaturityIndicatorInfoMap> indicatorMap;
-	private long dateModified;
+	private Date dateModified;
 	private boolean disabled;
 	
 	
@@ -26,26 +27,26 @@ public class AssesmentDetails implements Persistable{
 			List<String> squadList, String name, String releaseDate,
 			String comment) {
 		super();
-		this.assessementId = assessementId;
+		this.assessementId = String.valueOf(assessementId);
 		this.owenerId = owenerId;
 		this.squadList = squadList;
 		this.name = name;
 		this.releaseDate = releaseDate;
 		this.comment = comment;
-		this.dateModified = System.currentTimeMillis();
+		this.dateModified = new Date(System.currentTimeMillis());
 	}
 	public AssesmentDetails(long assessementId, String owenerId,
 			List<String> squadList, String name, String releaseDate,
 			String comment, List<MaturityIndicatorInfoMap> indicatorMap) {
 		super();
-		this.assessementId = assessementId;
+		this.assessementId = String.valueOf(assessementId);
 		this.owenerId = owenerId;
 		this.squadList = squadList;
 		this.name = name;
 		this.releaseDate = releaseDate;
 		this.comment = comment;
 		this.indicatorMap = indicatorMap;
-		this.dateModified = System.currentTimeMillis();
+		this.dateModified = new Date(System.currentTimeMillis());
 	}
 	/**
 	 * @return the type
@@ -62,13 +63,13 @@ public class AssesmentDetails implements Persistable{
 	/**
 	 * @return the assessementId
 	 */
-	public long getAssessementId() {
+	public String getAssessementId() {
 		return assessementId;
 	}
 	/**
 	 * @param assessementId the assessementId to set
 	 */
-	public void setAssessementId(long assessementId) {
+	public void setAssessementId(String assessementId) {
 		this.assessementId = assessementId;
 	}
 	/**
@@ -146,13 +147,13 @@ public class AssesmentDetails implements Persistable{
 	/**
 	 * @return the dateModified
 	 */
-	public long getDateModified() {
+	public Date getDateModified() {
 		return dateModified;
 	}
 	/**
 	 * @param dateModified the dateModified to set
 	 */
-	public void setDateModified(long dateModified) {
+	public void setDateModified(Date dateModified) {
 		this.dateModified = dateModified;
 	}
 	/**

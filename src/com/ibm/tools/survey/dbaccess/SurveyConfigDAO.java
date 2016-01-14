@@ -1,7 +1,7 @@
 package com.ibm.tools.survey.dbaccess;
 
-import static com.mongodb.client.model.Filters.and;
-import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Filters.*;
+import static com.mongodb.client.model.Sorts.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +13,7 @@ import org.bson.Document;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.ibm.tools.survey.bean.AssesmentDetails;
+import com.ibm.tools.survey.bean.MaturityAssesmentUser;
 import com.ibm.tools.survey.bean.MaturityIndicator;
 import com.ibm.tools.survey.bean.Persistable;
 import com.ibm.tools.survey.unit.AssesmentInsertJunit;
@@ -33,7 +34,39 @@ public class SurveyConfigDAO {
 
 	private static final String COLLECTION_NAME = "survey_data";
 
-	
+	public AssesmentDetails getAssessmentDetails(String userId) {
+		AssesmentDetails assesmentDetails = null;
+		try {
+			Gson serializer = new GsonBuilder().create();
+			MongoCollection<Document> collection = MongoDBHelper
+					.getCollection(COLLECTION_NAME);
+			// First get the squdid
+			Document sqadDetails = collection.find(
+					and(eq("type", MaturityAssesmentUser.TYPE),
+							eq("id", userId))).first();
+			if (sqadDetails != null) {
+				String sqadId = sqadDetails.getString("squadId");
+				if (sqadId != null) {
+					// Check the assessments
+					Document assesmentDoc = collection
+							.find(and(
+									eq("type", AssesmentDetails.TYPE),
+									elemMatch("squadList", new Document("$eq",
+											sqadId))))
+							.sort(descending("dateModified")).first();
+					if (assesmentDoc != null) {
+						assesmentDetails = serializer.fromJson(
+								assesmentDoc.toJson(), AssesmentDetails.class);
+					}
+				}
+			}
+		} catch (Exception ex) {
+			LOGGER.log(Level.WARNING,
+					"|SURVERY_CONFIG_DAO| Not able load assesment details", ex);
+		}
+		return assesmentDetails;
+	}
+
 	public boolean updateAssesmentDetails(AssesmentDetails assesment) {
 		// First search the indicators
 		boolean isSucces = false;
@@ -42,19 +75,23 @@ public class SurveyConfigDAO {
 			MongoCollection<Document> collection = MongoDBHelper
 					.getCollection(COLLECTION_NAME);
 			boolean isInsert = false;
-			
-				Document existingDoc = collection.find(
+
+			Document existingDoc = collection.find(
+					and(eq("type", AssesmentDetails.TYPE),
+							eq("assessementId", assesment.getAssessementId())))
+					.first();
+			if (existingDoc == null) {
+				isInsert = true;
+			} else {
+				Document updatedDocument = Document.parse(serializer
+						.toJson(assesment));
+				collection.updateOne(
 						and(eq("type", AssesmentDetails.TYPE),
-								eq("assessementId", assesment.getAssessementId()))).first();
-				if (existingDoc == null) {
-					isInsert = true;
-				} else {
-					Document updatedDocument = Document.parse(serializer.toJson(assesment));
-					collection.updateOne(and(eq("type", AssesmentDetails.TYPE),
-							eq("assessementId", assesment.getAssessementId())), new Document("$set", updatedDocument));
-				}
-			if(isInsert)
-			{
+								eq("assessementId",
+										assesment.getAssessementId())),
+						new Document("$set", updatedDocument));
+			}
+			if (isInsert) {
 				collection.insertOne(Document.parse(serializer
 						.toJson(assesment)));
 			}
@@ -66,7 +103,7 @@ public class SurveyConfigDAO {
 		}
 		return isSucces;
 	}
-	
+
 	public boolean updateMaturityIndicator(MaturityIndicator indicator) {
 		// First search the indicators
 		boolean isSucces = false;
@@ -74,33 +111,39 @@ public class SurveyConfigDAO {
 			MongoCollection<Document> collection = MongoDBHelper
 					.getCollection(COLLECTION_NAME);
 			boolean isInsert = false;
-			if(getSafeString(indicator.getQuestionid())!=null )
-			{
+			if (getSafeString(indicator.getQuestionid()) != null) {
 				Document existingDoc = collection.find(
 						and(eq("type", MaturityIndicator.TYPE),
-								eq("questionid", indicator.getQuestionid()))).first();
+								eq("questionid", indicator.getQuestionid())))
+						.first();
 				if (existingDoc == null) {
 					isInsert = true;
 				} else {
 					Document updatedDocument = new Document();
 					updatedDocument.put("disabled", indicator.isDisabled());
-					updatedDocument.put("displayOrder", indicator.getDisplayOrder());
+					updatedDocument.put("displayOrder",
+							indicator.getDisplayOrder());
 					updatedDocument.put("comment", indicator.getComment());
-					updatedDocument.put("indicatorText", indicator.getIndicatorText());
-					collection.updateOne(and(eq("type", MaturityIndicator.TYPE),
-							eq("questionid", indicator.getQuestionid())), new Document("$set", updatedDocument));
+					updatedDocument.put("indicatorText",
+							indicator.getIndicatorText());
+					collection
+							.updateOne(
+									and(eq("type", MaturityIndicator.TYPE),
+											eq("questionid",
+													indicator.getQuestionid())),
+									new Document("$set", updatedDocument));
 
 				}
 			}
-			
-			if(isInsert)
-			{
+
+			if (isInsert) {
 				Gson serializer = new GsonBuilder().create();
-				indicator.setQuestionid(String.valueOf(System.currentTimeMillis()));
+				indicator.setQuestionid(String.valueOf(System
+						.currentTimeMillis()));
 				collection.insertOne(Document.parse(serializer
 						.toJson(indicator)));
 			}
-			
+
 			isSucces = true;
 		} catch (Exception ex) {
 			LOGGER.log(Level.WARNING,
@@ -152,18 +195,15 @@ public class SurveyConfigDAO {
 		}
 		return isSucess;
 	}
-	
-	public  boolean deleteDataAllType(String type)
-	{
-		MongoCollection<Document> collection = MongoDBHelper
-				.getCollection();
-		collection.deleteMany(eq("type",type));
-		
+
+	public boolean deleteDataAllType(String type) {
+		MongoCollection<Document> collection = MongoDBHelper.getCollection();
+		collection.deleteMany(eq("type", type));
+
 		return true;
 	}
-	
-	private String getSafeString(String input)
-	{
-		return (input !=null ? input.trim(): "");
+
+	private String getSafeString(String input) {
+		return (input != null ? input.trim() : "");
 	}
 }
