@@ -2,7 +2,6 @@ package com.ibm.tools.survey.action;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +18,7 @@ import com.ibm.app.web.frmwk.bean.ViewType;
 import com.ibm.tools.survey.bean.AssesmentDetails;
 import com.ibm.tools.survey.bean.MaturityIndicator;
 import com.ibm.tools.survey.bean.MaturityIndicatorAccumulator;
+import com.ibm.tools.survey.bean.MaturityIndicatorInfoMap;
 import com.ibm.tools.survey.bean.UserDetails;
 import com.ibm.tools.survey.dbaccess.CachedReferenceDataStore;
 import com.ibm.tools.survey.dbaccess.SurveyConfigDAO;
@@ -27,7 +27,6 @@ public class AssessmentConfigAction implements WebActionHandler {
 
 	private static final String INDICATORS_SESSION_KEY = "INDICATORS";
 	private static final String INDICATOR_MAP_SESSION_KEY = "INDICATOR_MAP";
-	
 
 	@RequestMapping("loadExistingQuestionConfig.wss")
 	public ModelAndView loadExistingQuestionConfig(HttpServletRequest request,
@@ -154,31 +153,72 @@ public class AssessmentConfigAction implements WebActionHandler {
 				CachedReferenceDataStore.getAgilePracticeMap());
 		mvObject.addModel("levels", CachedReferenceDataStore.getLevels());
 		MaturityIndicatorAccumulator accumulator = new MaturityIndicatorAccumulator();
-		
+
 		mvObject.addModel("indicatorList", accumulator
 				.getAccumulatedList((new SurveyConfigDAO().getAllTypes(
 						MaturityIndicator.TYPE, MaturityIndicator.class))));
-		request.getSession().setAttribute(INDICATOR_MAP_SESSION_KEY, accumulator);
+		request.getSession().setAttribute(INDICATOR_MAP_SESSION_KEY,
+				accumulator);
 		mvObject.setView("app/surveyconfig.jsp");
 		return mvObject;
 	}
+
 	@RequestMapping("saveAssesmentDetails.wss")
-	public ModelAndView saveAssesmentDetails(HttpServletRequest request,HttpServletResponse response)
-	{
-		//ModelAndView 
-		return null;
+	public ModelAndView saveAssesmentDetails(HttpServletRequest request,
+			HttpServletResponse response) {
+		ModelAndView mvObject = new ModelAndView(ViewType.AJAX_VIEW);
+		AssesmentDetails assesmentDetails = buildNewAssesment(request);
+		Gson serializer = new GsonBuilder().create();
+		if (assesmentDetails != null) {
+			if((new SurveyConfigDAO()).updateAssesmentDetails(assesmentDetails))
+			{
+				mvObject.setView("{ \"status\" :  \"0\" , \"payload\" : "
+					+ serializer.toJson(assesmentDetails) + "}");
+			}
+			else
+			{
+				mvObject.setView("{ \"status\" :  \"1\" , \"errorMessage\" : "
+						+ "Could not save the assesment" + "}");
+			}
+		} else {
+			mvObject.setView("{ \"status\" :  \"1\" , \"errorMessage\" : "
+					+ "All mandatory fields are filled up" + "}");
+		}
+		return mvObject;
 	}
+
 	private AssesmentDetails buildNewAssesment(HttpServletRequest request) {
-		String surveyName = request.getParameter("surveyName");
-		String releaseDate = request.getParameter("releaseDate");
+		AssesmentDetails assesmentDetails = null;
+		String surveyName = getSafeString(request.getParameter("surveyName"));
+		String releaseDate = getSafeString(request.getParameter("releaseDate"));
 		String[] squadList = request.getParameterValues("sqadList");
-		String comment = request.getParameter("comment");
+		String comment = getSafeString(request.getParameter("comment"));
 		String ownerId = ((UserDetails) request.getSession().getAttribute(
 				"LOGGED_IN_USER")).getEmailId();
-		AssesmentDetails assesmentDetauls = new AssesmentDetails(
-				(new Date()).getTime(), ownerId, Arrays.asList(squadList),
-				surveyName, releaseDate, comment);
-		return assesmentDetauls;
+		String[] selectedQuestions = request.getParameterValues("questionId");
+		MaturityIndicatorAccumulator accumulator = (MaturityIndicatorAccumulator) request
+				.getSession().getAttribute(INDICATOR_MAP_SESSION_KEY);
+		Map<String, MaturityIndicatorInfoMap> existingQuestionMap = accumulator
+				.getSavedMap();
+		// TODO: Validation of inputs
+		List<MaturityIndicatorInfoMap> listOfQuestionsToBeAdded = new ArrayList<>();
+		for (String questionId : selectedQuestions) {
+			MaturityIndicatorInfoMap item = existingQuestionMap
+					.get(getSafeString(questionId));
+			listOfQuestionsToBeAdded.add(item);
+		}
+		String assesmentId = getSafeString(request.getParameter("assesmentId"));
+		if (assesmentId.length() == 0) {
+			assesmentDetails = new AssesmentDetails(System.currentTimeMillis(),
+					ownerId, Arrays.asList(squadList), surveyName, releaseDate,
+					comment, listOfQuestionsToBeAdded);
+		} else {
+			assesmentDetails = new AssesmentDetails(
+					Long.parseLong(assesmentId), ownerId,
+					Arrays.asList(squadList), surveyName, releaseDate, comment,
+					listOfQuestionsToBeAdded);
+		}
+		return assesmentDetails;
 	}
 
 	private String getSafeString(String input) {
