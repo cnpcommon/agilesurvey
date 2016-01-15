@@ -57,7 +57,7 @@
 													</div>
 													<div id="${indicatorMap.levelIndicatorMap[levelValueStr].questionid}" class="panel-collapse collapse in">
 														<div class="panel-body">
-															<c:out value="${indicatorMap.levelIndicatorMap[levelValueStr].indicatorText }" />
+															<c:out value="${indicatorMap.levelIndicatorMap[levelValueStr].indicatorText }" escapeXml="false"/>
 														</div>
 													</div>
 												</div>
@@ -79,7 +79,7 @@
 									  <div class="panel panel-default">
 									    <div class="panel-heading">
 									      <h4 class="panel-title">
-									        <label>Do not know</label> 
+									        <label>Not applicable</label> 
 									        <span class="pull-right" >Select&nbsp;<input type="radio" name="${indicatorMap.itemId}" value="-1" /></span>
 									      </h4>
 									    </div>

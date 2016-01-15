@@ -47,7 +47,7 @@ public class SurveyConfigDAO {
 				collection.deleteMany(and(eq("type", Scores.TYPE),
 						eq("memberId", score.getMemberId()),
 						eq("assestementId", score.getAssestementId()),
-						eq("squadId",score.getSquadId())));
+						eq("squadId", score.getSquadId())));
 
 				Gson serializer = new GsonBuilder().create();
 				List<Document> docs = new ArrayList<>(listofObjects.size());
@@ -110,6 +110,35 @@ public class SurveyConfigDAO {
 							eq("owenerId", owner)))
 					.sort(descending("dateModified"))
 					.into(new ArrayList<Document>());
+			if (assesmentDocList != null) {
+				assesmentList = new ArrayList<>();
+				for (Document assesmentDoc : assesmentDocList) {
+					assesmentList.add(serializer.fromJson(
+							assesmentDoc.toJson(), AssesmentDetails.class));
+				}
+			}
+
+		} catch (Exception ex) {
+			LOGGER.log(
+					Level.WARNING,
+					"|SURVERY_CONFIG_DAO| Not able load assesment list for owner",
+					ex);
+		}
+		return assesmentList;
+	}
+
+	public List<AssesmentDetails> getAssesmentsForSquad(String sqadId) {
+		List<AssesmentDetails> assesmentList = null;
+		try {
+			Gson serializer = new GsonBuilder().create();
+			MongoCollection<Document> collection = MongoDBHelper
+					.getCollection(COLLECTION_NAME);
+			List<Document> assesmentDocList = collection
+					.find(and(eq("type", AssesmentDetails.TYPE),
+							elemMatch("squadList", new Document("$eq", sqadId))))
+					.sort(descending("dateModified"))
+					.into(new ArrayList<Document>());
+
 			if (assesmentDocList != null) {
 				assesmentList = new ArrayList<>();
 				for (Document assesmentDoc : assesmentDocList) {
@@ -239,22 +268,24 @@ public class SurveyConfigDAO {
 	public <T extends Persistable> List<T> getAllTypes(String type, Class<T> clz) {
 
 		List<T> retList = new ArrayList<>();
-		try{
-		MongoCollection<Document> collection = MongoDBHelper
-				.getCollection(COLLECTION_NAME);
-		List<Document> docs = collection.find(eq("type", type)).into(
-				new ArrayList<Document>());
-		if (docs != null && docs.size() > 0) {
-			Gson serializer = new GsonBuilder().create();
-			
-			for (Document doc : docs) {
-				T dbObject = serializer.fromJson(doc.toJson(), clz);
-				retList.add(dbObject);
+		try {
+			MongoCollection<Document> collection = MongoDBHelper
+					.getCollection(COLLECTION_NAME);
+			List<Document> docs = collection.find(eq("type", type)).into(
+					new ArrayList<Document>());
+			if (docs != null && docs.size() > 0) {
+				Gson serializer = new GsonBuilder().create();
+
+				for (Document doc : docs) {
+					T dbObject = serializer.fromJson(doc.toJson(), clz);
+					retList.add(dbObject);
+				}
 			}
-		 } 
-		}
-		catch(Exception e){
-			LOGGER.log(Level.WARNING, "exception|SURVERY_CONFIG_DAO| getAllTypes | "+e.getMessage());
+		} catch (Exception e) {
+			LOGGER.log(
+					Level.WARNING,
+					"exception|SURVERY_CONFIG_DAO| getAllTypes | "
+							+ e.getMessage());
 		}
 		return retList;
 	}
