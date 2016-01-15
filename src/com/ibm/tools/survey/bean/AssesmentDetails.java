@@ -19,8 +19,10 @@ public class AssesmentDetails implements Persistable{
 	private String name;
 	private String releaseDate;
 	private String comment;
-	private List<MaturityIndicator> indicators;
-	private String dateModified;
+	private List<MaturityIndicatorInfoMap> indicatorMap;
+	private Date dateModified;
+	private boolean disabled;
+	
 	
 	public AssesmentDetails(long assessementId, String owenerId,
 			List<String> squadList, String name, String releaseDate,
@@ -32,8 +34,8 @@ public class AssesmentDetails implements Persistable{
 		this.name = name;
 		this.releaseDate = releaseDate;
 		this.comment = comment;
-		this.indicators = new ArrayList<>(5);
-		this.dateModified = String.valueOf((new Date()).getTime());
+		this.indicatorMap = new ArrayList<>();
+		this.dateModified = new Date(System.currentTimeMillis());
 	}
 
 	/**
@@ -42,147 +44,144 @@ public class AssesmentDetails implements Persistable{
 	public ObjectId get_id() {
 		return _id;
 	}
-
-	/**
-	 * @param _id the _id to set
-	 */
-	public void set_id(ObjectId _id) {
-		this._id = _id;
+	public AssesmentDetails(long assessementId, String owenerId,
+			List<String> squadList, String name, String releaseDate,
+			String comment, List<MaturityIndicatorInfoMap> indicatorMap) {
+		super();
+		this.assessementId = String.valueOf(assessementId);
+		this.owenerId = owenerId;
+		this.squadList = squadList;
+		this.name = name;
+		this.releaseDate = releaseDate;
+		this.comment = comment;
+		this.indicatorMap = indicatorMap;
+		this.dateModified = new Date(System.currentTimeMillis());
 	}
-
 	/**
 	 * @return the type
 	 */
 	public String getType() {
 		return type;
 	}
-
 	/**
 	 * @param type the type to set
 	 */
 	public void setType(String type) {
 		this.type = type;
 	}
-
 	/**
 	 * @return the assessementId
 	 */
 	public String getAssessementId() {
 		return assessementId;
 	}
-
 	/**
 	 * @param assessementId the assessementId to set
 	 */
 	public void setAssessementId(String assessementId) {
 		this.assessementId = assessementId;
 	}
-
 	/**
 	 * @return the owenerId
 	 */
 	public String getOwenerId() {
 		return owenerId;
 	}
-
 	/**
 	 * @param owenerId the owenerId to set
 	 */
 	public void setOwenerId(String owenerId) {
 		this.owenerId = owenerId;
 	}
-
 	/**
 	 * @return the squadList
 	 */
 	public List<String> getSquadList() {
 		return squadList;
 	}
-
 	/**
 	 * @param squadList the squadList to set
 	 */
 	public void setSquadList(List<String> squadList) {
 		this.squadList = squadList;
 	}
-
 	/**
 	 * @return the name
 	 */
 	public String getName() {
 		return name;
 	}
-
 	/**
 	 * @param name the name to set
 	 */
 	public void setName(String name) {
 		this.name = name;
 	}
-
 	/**
 	 * @return the releaseDate
 	 */
 	public String getReleaseDate() {
 		return releaseDate;
 	}
-
 	/**
 	 * @param releaseDate the releaseDate to set
 	 */
 	public void setReleaseDate(String releaseDate) {
 		this.releaseDate = releaseDate;
 	}
-
 	/**
 	 * @return the comment
 	 */
 	public String getComment() {
 		return comment;
 	}
-
 	/**
 	 * @param comment the comment to set
 	 */
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
-
 	/**
-	 * @return the indicators
+	 * @return the indicatorMap
 	 */
-	public List<MaturityIndicator> getIndicators() {
-		return indicators;
+	public List<MaturityIndicatorInfoMap> getIndicatorMap() {
+		return indicatorMap;
 	}
-
 	/**
-	 * @param indicators the indicators to set
+	 * @param indicatorMap the indicatorMap to set
 	 */
-	public void setIndicators(List<MaturityIndicator> indicators) {
-		this.indicators = indicators;
+	public void setIndicatorMap(List<MaturityIndicatorInfoMap> indicatorMap) {
+		this.indicatorMap = indicatorMap;
 	}
-	
-	/**
-	 * Add maturity indicator
-	 * @param indicator
-	 */
-	public void addIndicators(MaturityIndicator indicator) {
-		this.indicators.add(indicator);
-	}
-
 	/**
 	 * @return the dateModified
 	 */
-	public String getDateModified() {
+
+	public Date getDateModified() {
 		return dateModified;
 	}
-
 	/**
 	 * @param dateModified the dateModified to set
 	 */
-	public void setDateModified(String dateModified) {
+	public void setDateModified(Date dateModified) {
 		this.dateModified = dateModified;
 	}
-	
-	
+	/**
+	 * @param _id the _id to set
+	 */
+	public void set_id(ObjectId _id) {
+		this._id = _id;
+	}
+	/**
+	 * @return the disabled
+	 */
+	public boolean isDisabled() {
+		return disabled;
+	}
+	/**
+	 * @param disabled the disabled to set
+	 */
+	public void setDisabled(boolean disabled) {
+		this.disabled = disabled;
+	}
 }

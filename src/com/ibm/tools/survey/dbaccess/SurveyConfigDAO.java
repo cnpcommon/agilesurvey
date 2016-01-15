@@ -1,7 +1,7 @@
 package com.ibm.tools.survey.dbaccess;
 
-import static com.mongodb.client.model.Filters.and;
-import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Filters.*;
+import static com.mongodb.client.model.Sorts.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,11 +13,11 @@ import org.bson.Document;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.ibm.tools.survey.bean.AssesmentDetails;
+import com.ibm.tools.survey.bean.MaturityAssesmentUser;
 import com.ibm.tools.survey.bean.MaturityIndicator;
 import com.ibm.tools.survey.bean.Persistable;
 import com.ibm.tools.utils.MongoDBHelper;
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.result.DeleteResult;
 
 /**
  * DAO Class to access survey config data
@@ -31,6 +31,76 @@ public class SurveyConfigDAO {
 			.getName());
 
 	private static final String COLLECTION_NAME = "survey_data";
+
+	public AssesmentDetails getAssessmentDetails(String userId) {
+		AssesmentDetails assesmentDetails = null;
+		try {
+			Gson serializer = new GsonBuilder().create();
+			MongoCollection<Document> collection = MongoDBHelper
+					.getCollection(COLLECTION_NAME);
+			// First get the squdid
+			Document sqadDetails = collection.find(
+					and(eq("type", MaturityAssesmentUser.TYPE),
+							eq("id", userId))).first();
+			if (sqadDetails != null) {
+				String sqadId = sqadDetails.getString("squadId");
+				if (sqadId != null) {
+					// Check the assessments
+					Document assesmentDoc = collection
+							.find(and(
+									eq("type", AssesmentDetails.TYPE),
+									elemMatch("squadList", new Document("$eq",
+											sqadId))))
+							.sort(descending("dateModified")).first();
+					if (assesmentDoc != null) {
+						assesmentDetails = serializer.fromJson(
+								assesmentDoc.toJson(), AssesmentDetails.class);
+					}
+				}
+			}
+		} catch (Exception ex) {
+			LOGGER.log(Level.WARNING,
+					"|SURVERY_CONFIG_DAO| Not able load assesment details", ex);
+		}
+		return assesmentDetails;
+	}
+
+	public boolean updateAssesmentDetails(AssesmentDetails assesment) {
+		// First search the indicators
+		boolean isSucces = false;
+		try {
+			Gson serializer = new GsonBuilder().create();
+			MongoCollection<Document> collection = MongoDBHelper
+					.getCollection(COLLECTION_NAME);
+			boolean isInsert = false;
+
+			Document existingDoc = collection.find(
+					and(eq("type", AssesmentDetails.TYPE),
+							eq("assessementId", assesment.getAssessementId())))
+					.first();
+			if (existingDoc == null) {
+				isInsert = true;
+			} else {
+				Document updatedDocument = Document.parse(serializer
+						.toJson(assesment));
+				collection.updateOne(
+						and(eq("type", AssesmentDetails.TYPE),
+								eq("assessementId",
+										assesment.getAssessementId())),
+						new Document("$set", updatedDocument));
+			}
+			if (isInsert) {
+				collection.insertOne(Document.parse(serializer
+						.toJson(assesment)));
+			}
+			isSucces = true;
+		} catch (Exception ex) {
+			LOGGER.log(Level.WARNING,
+					"|SURVERY_CONFIG_DAO| Indicator save failure", ex);
+			isSucces = false;
+		}
+		return isSucces;
+	}
 
 	public boolean updateMaturityIndicator(MaturityIndicator indicator) {
 		// First search the indicators
@@ -139,14 +209,4 @@ public class SurveyConfigDAO {
 		return (input != null ? input.trim() : "");
 	}
 
-	public List<AssesmentDetails> getAllAssesmentDetails(String owenerId) {
-		List<AssesmentDetails> listOfPersistableType = getAllTypes(
-				AssesmentDetails.TYPE, AssesmentDetails.class);
-		List<AssesmentDetails> listOfFilteredPersistType = new ArrayList<>();
-		for (AssesmentDetails persistObject : listOfPersistableType) {
-			if (persistObject.getOwenerId().equalsIgnoreCase(owenerId))
-				listOfFilteredPersistType.add(persistObject);
-		}
-		return listOfFilteredPersistType;
-	}
 }

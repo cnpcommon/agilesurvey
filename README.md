@@ -1,6 +1,17 @@
 # Agile Maturity Survey
 
 ---
+## Usefull commands
+
+## To show what you have done in the working directory  
+## git status 
+
+## To show merge conflict files
+## git diff --name-only --diff-filter=U
+---
+
+
+---
 
 ## I have added a HomeAction class that implements home.wss. 
 ## Please implement all the dash board related logic in the HomeAction class

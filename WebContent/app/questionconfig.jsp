@@ -36,7 +36,7 @@
 				    	<select class="form-control" id="principle" name="principle">
 				    		<option value="" selected>Select principle</option>
 					        <c:forEach items="${principleList}" var="principle">
-					        	<option value="${principle.principleId }">${ principle.description}</option>
+					        	<option value="${principle.principleId}">${ principle.description}</option>
 					        </c:forEach>
 					      </select>
 				    </div>
@@ -124,7 +124,7 @@
     		for(var index=0;index<practiceList.length;index++)
     		{
     			var practiceDetails = practiceList[index];
-    			listItem += "<option value=\" "+practiceDetails.practiceId+"\">"+practiceDetails.shortName+"</option>" ;
+    			listItem += "<option value=\""+practiceDetails.practiceId+"\" >"+practiceDetails.shortName+"</option>" ;
     		}
     		 $("#practice").html(listItem);
 	    	 $("#maturityIndicator").val("");
