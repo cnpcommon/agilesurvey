@@ -28,10 +28,10 @@ public class HomeAction implements WebActionHandler {
 	public ModelAndView loadDashboard(HttpServletRequest request, HttpServletResponse response) {
 		UserDetails usrDetails = (UserDetails) request.getSession()
 				.getAttribute("LOGGED_IN_USER");
-		List<AssesmentDetails> filteredAssesmentDetails = new SurveyConfigDAO()
-				.getAllAssesmentDetails(usrDetails.getEmailId());
+		//List<AssesmentDetails> filteredAssesmentDetails = new SurveyConfigDAO()
+				
         ModelAndView mvObject=new ModelAndView(ViewType.JSP_VIEW);
-        mvObject.addModel("assesmentDetails", filteredAssesmentDetails);
+        //mvObject.addModel("assesmentDetails", filteredAssesmentDetails);
         mvObject.setView("app/dashboard.jsp");
         return mvObject;
 		
