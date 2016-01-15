@@ -13,27 +13,27 @@ public class AssesmentDetails implements Persistable{
 
 	private String type = TYPE ;
 	
-	private long assessementId;
+	private String assessementId;
 	private String owenerId;
 	private List<String> squadList;
 	private String name;
 	private String releaseDate;
 	private String comment;
 	private List<MaturityIndicator> indicators;
-	private long dateModified;
+	private String dateModified;
 	
 	public AssesmentDetails(long assessementId, String owenerId,
 			List<String> squadList, String name, String releaseDate,
 			String comment) {
 		super();
-		this.assessementId = assessementId;
+		this.assessementId = String.valueOf(assessementId);
 		this.owenerId = owenerId;
 		this.squadList = squadList;
 		this.name = name;
 		this.releaseDate = releaseDate;
 		this.comment = comment;
 		this.indicators = new ArrayList<>(5);
-		this.dateModified = (new Date()).getTime();
+		this.dateModified = String.valueOf((new Date()).getTime());
 	}
 
 	/**
@@ -67,14 +67,14 @@ public class AssesmentDetails implements Persistable{
 	/**
 	 * @return the assessementId
 	 */
-	public long getAssessementId() {
+	public String getAssessementId() {
 		return assessementId;
 	}
 
 	/**
 	 * @param assessementId the assessementId to set
 	 */
-	public void setAssessementId(long assessementId) {
+	public void setAssessementId(String assessementId) {
 		this.assessementId = assessementId;
 	}
 
@@ -173,14 +173,14 @@ public class AssesmentDetails implements Persistable{
 	/**
 	 * @return the dateModified
 	 */
-	public long getDateModified() {
+	public String getDateModified() {
 		return dateModified;
 	}
 
 	/**
 	 * @param dateModified the dateModified to set
 	 */
-	public void setDateModified(long dateModified) {
+	public void setDateModified(String dateModified) {
 		this.dateModified = dateModified;
 	}
 	

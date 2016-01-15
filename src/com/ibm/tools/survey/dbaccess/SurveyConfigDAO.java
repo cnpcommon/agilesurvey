@@ -12,6 +12,7 @@ import org.bson.Document;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.ibm.tools.survey.bean.AssesmentDetails;
 import com.ibm.tools.survey.bean.MaturityIndicator;
 import com.ibm.tools.survey.bean.Persistable;
 import com.ibm.tools.utils.MongoDBHelper;
@@ -38,33 +39,39 @@ public class SurveyConfigDAO {
 			MongoCollection<Document> collection = MongoDBHelper
 					.getCollection(COLLECTION_NAME);
 			boolean isInsert = false;
-			if(getSafeString(indicator.getQuestionid())!=null )
-			{
+			if (getSafeString(indicator.getQuestionid()) != null) {
 				Document existingDoc = collection.find(
 						and(eq("type", MaturityIndicator.TYPE),
-								eq("questionid", indicator.getQuestionid()))).first();
+								eq("questionid", indicator.getQuestionid())))
+						.first();
 				if (existingDoc == null) {
 					isInsert = true;
 				} else {
 					Document updatedDocument = new Document();
 					updatedDocument.put("disabled", indicator.isDisabled());
-					updatedDocument.put("displayOrder", indicator.getDisplayOrder());
+					updatedDocument.put("displayOrder",
+							indicator.getDisplayOrder());
 					updatedDocument.put("comment", indicator.getComment());
-					updatedDocument.put("indicatorText", indicator.getIndicatorText());
-					collection.updateOne(and(eq("type", MaturityIndicator.TYPE),
-							eq("questionid", indicator.getQuestionid())), new Document("$set", updatedDocument));
+					updatedDocument.put("indicatorText",
+							indicator.getIndicatorText());
+					collection
+							.updateOne(
+									and(eq("type", MaturityIndicator.TYPE),
+											eq("questionid",
+													indicator.getQuestionid())),
+									new Document("$set", updatedDocument));
 
 				}
 			}
-			
-			if(isInsert)
-			{
+
+			if (isInsert) {
 				Gson serializer = new GsonBuilder().create();
-				indicator.setQuestionid(String.valueOf(System.currentTimeMillis()));
+				indicator.setQuestionid(String.valueOf(System
+						.currentTimeMillis()));
 				collection.insertOne(Document.parse(serializer
 						.toJson(indicator)));
 			}
-			
+
 			isSucces = true;
 		} catch (Exception ex) {
 			LOGGER.log(Level.WARNING,
@@ -77,21 +84,25 @@ public class SurveyConfigDAO {
 
 	public <T extends Persistable> List<T> getAllTypes(String type, Class<T> clz) {
 
+		List<T> retList = new ArrayList<>();
+		try{
 		MongoCollection<Document> collection = MongoDBHelper
 				.getCollection(COLLECTION_NAME);
 		List<Document> docs = collection.find(eq("type", type)).into(
 				new ArrayList<Document>());
 		if (docs != null && docs.size() > 0) {
 			Gson serializer = new GsonBuilder().create();
-			List<T> retList = new ArrayList<>();
+			
 			for (Document doc : docs) {
 				T dbObject = serializer.fromJson(doc.toJson(), clz);
 				retList.add(dbObject);
 			}
-			return retList;
-		} else {
-			return new ArrayList<>();
+		 } 
 		}
+		catch(Exception e){
+			LOGGER.log(Level.WARNING, "exception|SURVERY_CONFIG_DAO| getAllTypes | "+e.getMessage());
+		}
+		return retList;
 	}
 
 	public <T extends Persistable> boolean saveData(List<T> listofObjects) {
@@ -116,18 +127,26 @@ public class SurveyConfigDAO {
 		}
 		return isSucess;
 	}
-	
-	public  boolean deleteDataAllType(String type)
-	{
-		MongoCollection<Document> collection = MongoDBHelper
-				.getCollection();
-		collection.deleteMany(eq("type",type));
-		
+
+	public boolean deleteDataAllType(String type) {
+		MongoCollection<Document> collection = MongoDBHelper.getCollection();
+		collection.deleteMany(eq("type", type));
+
 		return true;
 	}
-	
-	private String getSafeString(String input)
-	{
-		return (input !=null ? input.trim(): "");
+
+	private String getSafeString(String input) {
+		return (input != null ? input.trim() : "");
+	}
+
+	public List<AssesmentDetails> getAllAssesmentDetails(String owenerId) {
+		List<AssesmentDetails> listOfPersistableType = getAllTypes(
+				AssesmentDetails.TYPE, AssesmentDetails.class);
+		List<AssesmentDetails> listOfFilteredPersistType = new ArrayList<>();
+		for (AssesmentDetails persistObject : listOfPersistableType) {
+			if (persistObject.getOwenerId().equalsIgnoreCase(owenerId))
+				listOfFilteredPersistType.add(persistObject);
+		}
+		return listOfFilteredPersistType;
 	}
 }
