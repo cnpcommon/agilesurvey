@@ -23,9 +23,9 @@
   <body>
   	<%@include file="nav.html" %>
   	<div class="well">
-  	<h1>Questions setup </h1>
+  	<h1>Practice setup </h1>
 	    <div class="panel panel-primary">
-	  	<div class="panel-heading panel-primary"><b>Configure questions </b></div>
+	  	<div class="panel-heading panel-primary"><b>Configure practices </b></div>
 	  	<div class="panel-body">
 			<form class="form-horizontal" role="form" action="submitQuestionSetup.wss" id="questionDetailsFrm">
 				  <input type="hidden" name="questionId" id="questionId" value="" />
