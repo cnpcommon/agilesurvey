@@ -87,7 +87,7 @@
 													</div>
 													<div id="${indicatorMap.levelIndicatorMap[levelValueStr].questionid}" class="panel-collapse collapse">
 														<div class="panel-body">
-															<c:out value="${indicatorMap.levelIndicatorMap[levelValueStr].indicatorText }" />
+															<c:out value="${indicatorMap.levelIndicatorMap[levelValueStr].indicatorText }" escapeXml="false"/>
 														</div>
 													</div>
 												</div>

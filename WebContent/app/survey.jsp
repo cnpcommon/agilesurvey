@@ -1,6 +1,7 @@
 <%@page language="java"
 	contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>     	
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>     
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>	
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -28,7 +29,7 @@
   		<input type="hidden" name="assesmentId" value="${assesment.assessementId}" />
 	   
 		<div class="panel panel-primary">
-	  		<div class="panel-heading panel-primary"><b>Survey Questions </b> <span class="label label-warning" id="status">0 Selected</span></div>
+	  		<div class="panel-heading panel-primary"><b>Survey Questions </b> <span class="label label-warning pull-right" id="totalCount">0 Selected</span></div>
 		  	<div class="panel-body">
 		  		 <!--  Adding the questions in the collapsible accordian -->
 		  		 <div class="panel-group" id="accordion">
@@ -39,6 +40,7 @@
 		  		 		<div class="panel-heading">
 		  		 			<h4 class="panel-title">
 						        <a data-toggle="collapse" data-parent="#accordion" href="#quid_${indicatorMap.principleId}_${indicatorMap.practiceId}"><c:out value="${principleMap[indicatorMap.principleId].description}"/> &nbsp; <c:out value="${practiceMap[indicatorMap.practiceId].shortName}" /></a>
+					        	<span id="stat_${indicatorMap.itemId}" class="label label-default pull-right"></span>
 					        </h4>
 		  		 		</div>
 		  		 		<div id="quid_${indicatorMap.principleId}_${indicatorMap.practiceId}" class="panel-collapse collapse">
@@ -92,7 +94,7 @@
 		  		 	</c:forEach>
 		  		 </div><!--  End of accordian -->
 		  		 <div class="col-sm-10">&nbsp;</div>
-				<div class="col-sm-2"><button type="button" class="btn btn-primary btn-lg" id="submitSurvey">Submit</button></div>
+				<div class="col-sm-2"><button type="button" class="btn btn-primary btn-lg  pull-right" id="submitSurvey"><span class="glyphicon glyphicon-floppy-disk"></span>&nbsp;Submit</button></div>
 		  	</div>
 		 </div>
 	</form>
@@ -114,6 +116,7 @@
 	    </div>
 	</div>
 	</div>
+	<%@include file="footer.jsp" %>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="js/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
@@ -121,8 +124,21 @@
     
      <script type="text/javascript">
      	var error = false;
+     	var questionCount = <c:out value="${fn:length(assesment.indicatorMap)}" /> ;
      	$(document).ready(function(){
-     	
+     		//Add onclick handler to all the radio to show a batch
+     		updateInitialStats();
+     		
+     		$("input[type=radio]").click(function(){
+     			//Update the status of answered question count 
+     			var n = $( "input[type=radio]:checked" ).length;
+     			$("#totalCount").html(n + " of "+questionCount+ " questions are answered");
+     			$( "input[type=radio]:checked" ).each(function(index,element){
+     			
+     				//console.log("Selected name "+ element.name);
+     				$("#stat_"+element.name).html("Already answered");
+     			});
+     		});
      		$('#alertModal').on('hidden.bs.modal', function () {
     				// do something
     				if(!error)
@@ -152,11 +168,6 @@
      					}
      				});
      			}
-     			else
-     			{
-     				error = true;
-     				showMessage("Validation error");
-     			}
      		});
      	
      	});
@@ -169,8 +180,25 @@
      	}
      	function validateForm()
      	{
+     		error = true;
      		//TODO: Form validation 
+     		var n = $( "input[type=radio]:checked" ).length;
+     		if(n<questionCount)
+     		{
+     			showMessage("You have not answered all the questions.<br/>Please answer all the questions.");
+     			return false;
+     		}
+     		error = false;
      		return true;
+     	}
+     	function updateInitialStats()
+     	{
+     		//$("#totalCount").html(" 0 of "+questionCount+ " questions are answered");
+     		var n = $( "input[type=radio]:checked" ).length;
+   			$("#totalCount").html(n + " of "+questionCount+ " questions are answered");
+   			$( "input[type=radio]:checked" ).each(function(index,element){
+    				$("#stat_"+element.name).html("Already answered");
+    		});
      	}
      </script>
   </body>

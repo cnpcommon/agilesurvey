@@ -27,8 +27,8 @@
 			<h1>Description</h1>
 		</div>
 		<div class="jumbotron">
-			<h2>Agile Maturity Survey</h2>
-			<p>abra ka dabra..gili gili chu.......</p>
+			<h2>Agile Maturity Survey Tool</h2>
+			<p> Home page conetent</p>
 		</div>
 	</div>
 
