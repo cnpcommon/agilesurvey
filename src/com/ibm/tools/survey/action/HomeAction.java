@@ -30,8 +30,9 @@ public class HomeAction implements WebActionHandler {
 				.getAttribute("LOGGED_IN_USER");
 		List<AssesmentDetails> filteredAssesmentDetails = new SurveyConfigDAO()
 				.getAssesmentsByOwner(usrDetails.getEmailId());
+
         ModelAndView mvObject=new ModelAndView(ViewType.JSP_VIEW);
-        mvObject.addModel("assesmentDetails", filteredAssesmentDetails);
+        //mvObject.addModel("assesmentDetails", filteredAssesmentDetails);
         mvObject.setView("app/dashboard.jsp");
         return mvObject;
 		
