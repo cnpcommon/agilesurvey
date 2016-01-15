@@ -79,7 +79,7 @@ public class SurveyAction implements WebActionHandler {
 				scores.add(rslt);
 			}
 			if (scores.size() > 0) {
-				if (daoObject.saveData(scores)) {
+				if (daoObject.saveScores(scores)) {
 					mvObject.setView("{ \"status\" :  \"0\" } ");
 				} else {
 					mvObject.setView("{ \"status\" :  \"1\" , \"errorMessage\" : "

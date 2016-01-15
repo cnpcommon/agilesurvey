@@ -23,7 +23,7 @@ public class MaturityIndicatorInfoMap {
 	{
 		this.principleId = principle;
 		this.practiceId = practice;
-		this.itemId = String.valueOf(System.currentTimeMillis());
+		this.itemId = String.valueOf(System.currentTimeMillis())+String.valueOf((int)(Math.random()*10000));
 		
 	}
 	
