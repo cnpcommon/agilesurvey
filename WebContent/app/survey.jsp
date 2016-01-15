@@ -24,7 +24,7 @@
   	<%@include file="nav.html" %>
   	<div class="well">
   	<h1>Maturity Assessment ${assesment.name} dated ${assesment.releaseDate}  </h1>
-  	<form class="form-horizontal" role="form" action="saveAssesment.wss" method="post" id="surveyDetailsFrm" >
+  	<form class="form-horizontal" role="form" action="saveSurveyResults.wss" method="post" id="surveyDetailsFrm" >
   		<input type="hidden" name="assesmentId" value="${assesment.assessementId}" />
 	   
 		<div class="panel panel-primary">
@@ -52,7 +52,7 @@
 													<div class="panel-heading">
 													<h4 class="panel-title">
 														<a data-toggle="collapse" href="#${indicatorMap.levelIndicatorMap[levelValueStr].questionid}"><c:out value="${level.name}" /></a>
-														<input type="radio" name="${indicatorMap.principleId}_${indicatorMap.practiceId}" value="${level.level}" class="pull-right" />
+														<span class="pull-right" >Select&nbsp;<input type="radio" name="${indicatorMap.itemId}" value="${level.level}" /></span>
 													</h4>
 													</div>
 													<div id="${indicatorMap.levelIndicatorMap[levelValueStr].questionid}" class="panel-collapse collapse in">
@@ -64,8 +64,27 @@
 											</div>
 						      			</c:if>
 						      		</c:forEach>
-						      		
-						      	
+						      		<!--  Now adding do not know or NA -->
+						      		 <div class="panel-group">
+									  <div class="panel panel-default">
+									    <div class="panel-heading">
+									      <h4 class="panel-title">
+									        <label>Do not know</label>
+									        	<span class="pull-right" >Select&nbsp;<input type="radio" name="${indicatorMap.itemId}" value="0" /></span>
+									      </h4>
+									    </div>
+									  </div>
+									 </div>
+						      		<div class="panel-group">
+									  <div class="panel panel-default">
+									    <div class="panel-heading">
+									      <h4 class="panel-title">
+									        <label>Do not know</label> 
+									        <span class="pull-right" >Select&nbsp;<input type="radio" name="${indicatorMap.itemId}" value="-1" /></span>
+									      </h4>
+									    </div>
+									  </div>
+									 </div>
 						      </div>
     					</div>
 		  		 	</div>
@@ -73,7 +92,7 @@
 		  		 	</c:forEach>
 		  		 </div><!--  End of accordian -->
 		  		 <div class="col-sm-10">&nbsp;</div>
-				<div class="col-sm-2"><button type="button" class="btn btn-primary btn-lg" id="saveAndReleaseBtn">Save & Release</button></div>
+				<div class="col-sm-2"><button type="button" class="btn btn-primary btn-lg" id="submitSurvey">Submit</button></div>
 		  	</div>
 		 </div>
 	</form>
@@ -112,24 +131,24 @@
     					$("#hidFrm").submit();
     				}
 			});
-     		$("#saveAndReleaseBtn").click(function(){
+     		$("#submitSurvey").click(function(){
      			console.log("Save operation is on");
      			//First do the validation
      			if(validateForm())
      			{
      				error = false;
-     				$.post("saveAssesmentDetails.wss", $( "#surveyDetailsFrm" ).serialize()).done(function(data){
+     				$.post("saveSurveyResults.wss", $( "#surveyDetailsFrm" ).serialize()).done(function(data){
      					var serverResponse = eval("("+ data+")");
      					if(serverResponse.status=="0")
      					{
      						console.log("Save is successful");
-     						showMessage("Assesment is saved.")
+     						showMessage("Survey Resutls saved. Thank you.")
      					}
      					else
      					{
      						error = true;
      						console.log("Save is NOT successfull");
-     						showMessage("Assesment is not saved.")
+     						showMessage("Survey Resutls are not saved.")
      					}
      				});
      			}

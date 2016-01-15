@@ -14,6 +14,7 @@ public class MaturityIndicatorInfoMap {
 
 	private String principleId;
 	private String practiceId;
+	private String itemId;
 	
 	private Map<String,MaturityIndicator> levelIndicatorMap = new LinkedHashMap<>();
 	
@@ -22,6 +23,7 @@ public class MaturityIndicatorInfoMap {
 	{
 		this.principleId = principle;
 		this.practiceId = practice;
+		this.itemId = String.valueOf(System.currentTimeMillis());
 		
 	}
 	
@@ -81,6 +83,20 @@ public class MaturityIndicatorInfoMap {
 	public  List<MaturityIndicator> getIndicators()
 	{
 		return new ArrayList<MaturityIndicator>(this.levelIndicatorMap.values());
+	}
+
+	/**
+	 * @return the itemId
+	 */
+	public String getItemId() {
+		return itemId;
+	}
+
+	/**
+	 * @param itemId the itemId to set
+	 */
+	public void setItemId(String itemId) {
+		this.itemId = itemId;
 	}
 	
 	

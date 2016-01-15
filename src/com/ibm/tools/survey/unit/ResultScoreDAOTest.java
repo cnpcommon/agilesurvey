@@ -31,7 +31,7 @@ public class ResultScoreDAOTest {
 	@Test
 	public void testGetResultSquadWise() {
 		Gson gson=new Gson();
-		List<AssessmentResult> rl=daoObject.getResultSquadWise(894567l,"esdw");
+		List<AssessmentResult> rl=daoObject.getResultSquadWise("894567l","esdw");
 		for(AssessmentResult ar:rl){
 			System.out.println(gson.toJson(ar));
 			System.out.println("practice name "+ar.getPracticeName());
@@ -42,7 +42,7 @@ public class ResultScoreDAOTest {
 	@Test
 	public void testGetResultAssesmentWise() {
 		Gson gson=new Gson();
-		List<AssessmentResult> rl=daoObject.getResultAssesmentWise(894567l);
+		List<AssessmentResult> rl=daoObject.getResultAssesmentWise("894567l");
 		for(AssessmentResult ar:rl){
 			System.out.println(gson.toJson(ar));
 			System.out.println("practice name "+ar.getPracticeName());
@@ -53,7 +53,7 @@ public class ResultScoreDAOTest {
 	public List<Scores> buildScores()
 	{
 		List<Scores> scoreList = new ArrayList<Scores>();
-		scoreList.add(new Scores("097088", "cnp1", 894567l, 4, "1_1", "1"));
+		/*scoreList.add(new Scores("097088", "cnp1", 894567l, 4, "1_1", "1"));
 		scoreList.add(new Scores("097088", "cnp1", 894567l, 3, "1_2", "1"));
 		scoreList.add(new Scores("097088", "cnp1", 894567l, 2, "2_1", "2"));
 		scoreList.add(new Scores("097088", "cnp1", 894567l, 1, "2_2", "2"));
@@ -107,7 +107,7 @@ public class ResultScoreDAOTest {
 		scoreList.add(new Scores("0970SM", "esdw", 894567l, 2, "4_1", "4"));
 		scoreList.add(new Scores("0970SM", "esdw", 894567l, 3, "5_1", "5"));
 		scoreList.add(new Scores("0970SM", "esdw", 894567l, 4, "5_2", "5"));
-		scoreList.add(new Scores("0970SM", "esdw", 894567l, 2, "5_3", "5"));
+		scoreList.add(new Scores("0970SM", "esdw", 894567l, 2, "5_3", "5"));*/
 		return scoreList;
 	}
 }

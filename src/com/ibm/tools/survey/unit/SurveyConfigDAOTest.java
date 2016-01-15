@@ -115,7 +115,7 @@ public class SurveyConfigDAOTest {
 	public List<Scores> buildScores()
 	{
 		List<Scores> scoreList = new ArrayList<Scores>();
-		scoreList.add(new Scores("097088", "cnp1", 12345l, 4, "1-1", "1"));
+		/*scoreList.add(new Scores("097088", "cnp1", 12345l, 4, "1-1", "1"));
 		scoreList.add(new Scores("097088", "cnp1", 12345l, 3, "1-2", "1"));
 		scoreList.add(new Scores("097088", "cnp1", 12345l, 2, "1-1", "2"));
 		scoreList.add(new Scores("097088", "cnp1", 12345l, 1, "2-2", "2"));
@@ -169,7 +169,7 @@ public class SurveyConfigDAOTest {
 		scoreList.add(new Scores("0970SM", "esdw", 12345l, 2, "4-1", "4"));
 		scoreList.add(new Scores("0970SM", "esdw", 12345l, 3, "5-1", "5"));
 		scoreList.add(new Scores("0970SM", "esdw", 12345l, 4, "5-2", "5"));
-		scoreList.add(new Scores("0970SM", "esdw", 12345l, 2, "5-3", "5"));
+		scoreList.add(new Scores("0970SM", "esdw", 12345l, 2, "5-3", "5"));*/
 		return scoreList;
 	}
 }

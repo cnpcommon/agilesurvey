@@ -2,14 +2,14 @@ package com.ibm.tools.survey.bean;
 
 import org.bson.types.ObjectId;
 
-public class Scores {
+public class Scores implements Persistable{
 	
 	public  static final String TYPE="score";
 	private ObjectId _id;
 	private String type = TYPE ;
 	private String memberId;
 	private String squadId;
-	private long assestementId;
+	private String assestementId;
 	
 	private int value;
 	private String practice;
@@ -20,7 +20,7 @@ public class Scores {
 		super();
 	}
 	
-	public Scores(String memberId,String squadId,long assestementId, int value,
+	public Scores(String memberId,String squadId,String assestementId, int value,
 			String practice, String principle) {
 		super();
 		this.memberId = memberId;
@@ -55,10 +55,10 @@ public class Scores {
 	public void setSquadId(String squadId) {
 		this.squadId = squadId;
 	}
-	public long getAssestementId() {
+	public String getAssestementId() {
 		return assestementId;
 	}
-	public void setAssestementId(long assestementId) {
+	public void setAssestementId(String assestementId) {
 		this.assestementId = assestementId;
 	}
 	public int getValue() {

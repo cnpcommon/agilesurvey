@@ -33,7 +33,7 @@ public class ResultScoreDAO {
 
 	private static final String COLLECTION_NAME = "survey_data";
 
-	public List<AssessmentResult> getResultSquadWise(long assestementId,String squadId) {
+	public List<AssessmentResult> getResultSquadWise(String assestementId,String squadId) {
 
 		MongoCollection<Document> collection = MongoDBHelper
 				.getCollection(COLLECTION_NAME);
@@ -55,7 +55,7 @@ public class ResultScoreDAO {
 		}
 		return resultList;
 	}
-	public  List<AssessmentResult> getResultAssesmentWise(long assestementId) {
+	public  List<AssessmentResult> getResultAssesmentWise(String assestementId) {
 
 		MongoCollection<Document> collection = MongoDBHelper
 				.getCollection(COLLECTION_NAME);
