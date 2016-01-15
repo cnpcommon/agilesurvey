@@ -16,10 +16,8 @@ import com.ibm.tools.survey.bean.AssesmentDetails;
 import com.ibm.tools.survey.bean.MaturityAssesmentUser;
 import com.ibm.tools.survey.bean.MaturityIndicator;
 import com.ibm.tools.survey.bean.Persistable;
-import com.ibm.tools.survey.unit.AssesmentInsertJunit;
 import com.ibm.tools.utils.MongoDBHelper;
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.result.DeleteResult;
 
 /**
  * DAO Class to access survey config data
@@ -156,21 +154,25 @@ public class SurveyConfigDAO {
 
 	public <T extends Persistable> List<T> getAllTypes(String type, Class<T> clz) {
 
+		List<T> retList = new ArrayList<>();
+		try{
 		MongoCollection<Document> collection = MongoDBHelper
 				.getCollection(COLLECTION_NAME);
 		List<Document> docs = collection.find(eq("type", type)).into(
 				new ArrayList<Document>());
 		if (docs != null && docs.size() > 0) {
 			Gson serializer = new GsonBuilder().create();
-			List<T> retList = new ArrayList<>();
+			
 			for (Document doc : docs) {
 				T dbObject = serializer.fromJson(doc.toJson(), clz);
 				retList.add(dbObject);
 			}
-			return retList;
-		} else {
-			return new ArrayList<>();
+		 } 
 		}
+		catch(Exception e){
+			LOGGER.log(Level.WARNING, "exception|SURVERY_CONFIG_DAO| getAllTypes | "+e.getMessage());
+		}
+		return retList;
 	}
 
 	public <T extends Persistable> boolean saveData(List<T> listofObjects) {
@@ -206,4 +208,5 @@ public class SurveyConfigDAO {
 	private String getSafeString(String input) {
 		return (input != null ? input.trim() : "");
 	}
+
 }

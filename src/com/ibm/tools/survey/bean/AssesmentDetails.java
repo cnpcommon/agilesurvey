@@ -1,5 +1,6 @@
 package com.ibm.tools.survey.bean;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -33,7 +34,15 @@ public class AssesmentDetails implements Persistable{
 		this.name = name;
 		this.releaseDate = releaseDate;
 		this.comment = comment;
+		this.indicatorMap = new ArrayList<>();
 		this.dateModified = new Date(System.currentTimeMillis());
+	}
+
+	/**
+	 * @return the _id
+	 */
+	public ObjectId get_id() {
+		return _id;
 	}
 	public AssesmentDetails(long assessementId, String owenerId,
 			List<String> squadList, String name, String releaseDate,
@@ -147,6 +156,7 @@ public class AssesmentDetails implements Persistable{
 	/**
 	 * @return the dateModified
 	 */
+
 	public Date getDateModified() {
 		return dateModified;
 	}
@@ -155,12 +165,6 @@ public class AssesmentDetails implements Persistable{
 	 */
 	public void setDateModified(Date dateModified) {
 		this.dateModified = dateModified;
-	}
-	/**
-	 * @return the _id
-	 */
-	public ObjectId get_id() {
-		return _id;
 	}
 	/**
 	 * @param _id the _id to set
@@ -180,6 +184,4 @@ public class AssesmentDetails implements Persistable{
 	public void setDisabled(boolean disabled) {
 		this.disabled = disabled;
 	}
-	
-	
 }
