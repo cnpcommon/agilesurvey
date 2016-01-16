@@ -53,7 +53,7 @@
 					    <label class="control-label  col-sm-2" for="sqadList">Select squad<span class="label label-danger">*</span></label>
 						    <div class="checkbox  col-sm-10">
 						     <c:forEach items="${squads}" var="squad">
-							     <label><input type="checkbox" value="squad" name="sqadList"><c:out value="${squad}" /></label>
+							     <label><input type="checkbox" value="${squad}" name="sqadList"><c:out value="${squad}" /></label>
 						     </c:forEach>
 							</div>
 					  </div>
