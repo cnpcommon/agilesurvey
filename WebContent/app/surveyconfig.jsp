@@ -50,8 +50,9 @@
 					  <div class="form-group">
 					    <label class="control-label  col-sm-2" for="sqadList">Select squad<span class="label label-danger">*</span></label>
 						    <div class="checkbox  col-sm-10">
-							  <label><input type="checkbox" value="esdw" name="sqadList">ESDW</label>
-							  <label><input type="checkbox" value="cnp1" name="sqadList">CNP1</label>
+						     <c:forEach items="${squads}" var="squad">
+							     <label><input type="checkbox" value="squad" name="sqadList"><c:out value="${squad}" /></label>
+						     </c:forEach>
 							</div>
 					  </div>
 					  <div class="form-group">
