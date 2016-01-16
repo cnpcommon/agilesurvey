@@ -28,7 +28,7 @@ public class DashboardAction implements WebActionHandler {
 		mvObject.setView("app/newhome.jsp");
 		if (usrDetails != null
 				&& ApplicationConstants.USER_ROLE_ITERATION_MGR
-						.equalsIgnoreCase(usrDetails.getRole())) {
+						.equalsIgnoreCase(usrDetails.getRole().trim())) {
 			// Get the squad details
 			MaturityAssesmentUser hieracrchyDetails = daoObject
 					.getMatutiryAssessmentInfoForUser(usrDetails.getEmailId());
