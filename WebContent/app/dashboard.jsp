@@ -96,8 +96,8 @@
 	<script src="js/jquery.min.js"></script>
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
 	<script src="js/bootstrap.min.js"></script>
-	<script src="js/exporting.js"></script>
 	<script src="js/highcharts.js"></script>
+	<script src="js/exporting.js"></script>
 	<script src="js/highcharts-more.js"></script>
 	<script src="js/genchart.js"></script>
 	<script>

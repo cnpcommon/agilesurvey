@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.ibm.app.web.frmwk.WebActionHandler;
 import com.ibm.app.web.frmwk.annotations.RequestMapping;
 import com.ibm.app.web.frmwk.bean.ModelAndView;
@@ -44,15 +46,15 @@ public class HomeAction implements WebActionHandler {
 	@RequestMapping("getmaturityscore.wss")
 	public ModelAndView showMaturityScore(HttpServletRequest request,
 			HttpServletResponse response) {
+		Gson gson = new GsonBuilder().create();
 		UserDetails usrDetails = (UserDetails) request.getSession()
 				.getAttribute("LOGGED_IN_USER");
 		String assesmentId = request.getParameter("assesmentId");
-		ModelAndView mvObject = new ModelAndView(ViewType.NO_VIEW);
+		ModelAndView mvObject = new ModelAndView(ViewType.AJAX_VIEW);
 		List<AssessmentResult> listOfResults = new ResultScoreDAO()
 				.getResultAssesmentWise(assesmentId);
-		AjaxDataWriter<List<AssessmentResult>> writer = new AjaxDataWriter<>();
-		writer.write(response, listOfResults,
-				(Class<List<AssessmentResult>>) listOfResults.getClass());
+		mvObject.setView(gson.toJson(listOfResults));
+		
 		return mvObject;
 	}
 
