@@ -70,15 +70,14 @@ public class HomeAction implements WebActionHandler {
 	}
 	@RequestMapping("getsquadscore.wss")
 	public ModelAndView showMaturityScorePerSquad(HttpServletRequest request,HttpServletResponse response){
-		ModelAndView mvObject = new ModelAndView(ViewType.NO_VIEW);
+		Gson gson = new GsonBuilder().create();
+		ModelAndView mvObject = new ModelAndView(ViewType.AJAX_VIEW);
 		UserDetails usrDetails = (UserDetails) request.getSession()
 				.getAttribute("LOGGED_IN_USER");
 		String assesmentId = request.getParameter("assesmentId");
 		String squadId=request.getParameter("squadId");
 		List<AssessmentResult> listOfResults=new ResultScoreDAO().getResultSquadWise(assesmentId, squadId);
-		AjaxDataWriter<List<AssessmentResult>> writer = new AjaxDataWriter<>();
-		writer.write(response, listOfResults,
-				(Class<List<AssessmentResult>>) listOfResults.getClass());
+		mvObject.setView(gson.toJson(listOfResults));
 		return mvObject;
 	}
 }

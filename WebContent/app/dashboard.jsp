@@ -28,7 +28,7 @@
 			<div class="col-sm-3">
 				<div class="wall">
 					<div class="panel panel-primary">
-						<div class="panel-heading">Assesment List</div>
+						<div class="panel-heading">Assessment List</div>
 						<div class="panel-body">
 							<button class="btn btn-primary dropdown-toggle" id="menu1"
 								type="button" data-toggle="dropdown">
