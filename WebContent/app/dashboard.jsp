@@ -28,13 +28,25 @@
 			<div class="col-sm-3">
 				<div class="wall">
 					<div class="panel panel-primary">
-						<div class="panel-heading">Assessment List</div>
+						<div class="panel-heading">Assesment List</div>
 						<div class="panel-body">
+						  <%-- <select>
+						    <c:forEach var="item" items="${assesmentDetails}">
+						      <option id="${item.assessementId}" class="assesment">${item.name}
+						      <p>(${item.releaseDate})</p>
+						     <c:forEach var="squad" items="${item.squadList}">
+								<input type="hidden" class="squadId" value="${squad}" />
+							 </c:forEach>
+							</option>
+						    </c:forEach> 
+						  </select>--%>
+						  <div class="dropdown">
 							<button class="btn btn-primary dropdown-toggle" id="menu1"
 								type="button" data-toggle="dropdown">
 								Select Assessment <span class="caret"></span>
 							</button>
-							<ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+							<!-- <ul class="dropdown-menu" role="menu" aria-labelledby="menu1"> -->
+							<ul class="dropdown-menu dropdown-menu-right">
 								<c:forEach var="item" items="${assesmentDetails}">
 									<li role="presentation"><a href="#"
 										id="${item.assessementId}" role="menuitem" class="assesment">
@@ -46,6 +58,7 @@
 										</c:forEach></li>
 								</c:forEach>
 							</ul>
+							</div>
 							<%-- <div class="list-group">
 								<c:forEach var="item" items="${assesmentDetails}">
 									<a href="#" id="${item.assessementId}"
@@ -58,35 +71,24 @@
 										<input type="hidden" name="squadId" value="${squad}" />
 									</c:forEach>
 								</c:forEach>
-							</div> --%>
+							      </div> --%>
 						</div>
 					</div>
 					<div>
 						<div class="panel panel-primary">
 							<div class="panel-heading">Squad List</div>
 							<div class="panel-body">
+							<div class="dropdown">
 								<button class="btn btn-primary dropdown-toggle" id="menu2"
 									type="button" data-toggle="dropdown">
 									Select Squad <span class="caret"></span>
 								</button>
-								<ul class="dropdown-menu squadlist" role="menu"
-									aria-labelledby="menu2">
-
+								<!-- <ul class="dropdown-menu squadlist" role="menu"
+									aria-labelledby="menu2"> -->
+                                <ul class="dropdown-menu squadlist">
 
 								</ul>
-								<%-- <div class="list-group">
-								<c:forEach var="item" items="${assesmentDetails}">
-									<a href="#" id="${item.assessementId}"
-										class="list-group-item assesment">
-										<h4 class="list-group-item-heading">${item.name}</h4>
-										<p class="list-group-item-text">Released :
-											${item.releaseDate}</p>
-									</a>
-									<c:forEach var="squad" items="${item.squadList}">
-										<input type="hidden" name="squadId" value="${squad}" />
-									</c:forEach>
-								</c:forEach>
-							</div> --%>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -141,125 +143,66 @@
 	<script src="js/jquery.min.js"></script>
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
 	<script src="js/bootstrap.min.js"></script>
-	<script src="js/highcharts.js"></script>
 	<script src="js/exporting.js"></script>
+	<script src="js/highcharts.js"></script>
 	<script src="js/highcharts-more.js"></script>
 	<script src="js/genchart.js"></script>
 	<script>
-		$(window)
-				.load(
-						function() {
-							$(".assesment")
-									.click(
-											function() {
-												var dataYTarget = [];
-												var dataYCurrent = [];
-												var dataYPrevious = [];
-												var dataXAxis = [];
-												var squadList = $(this)
-														.siblings(".squadId");
-												var templateText = "";
-												$(".squadlist").html("");
-												for (i = 0; i < squadList.length; i++) {
-													templateText += "<li role='presentation'>";
-													templateText += "<a data-parent='"
-															+ $(this)
-																	.attr('id')
-															+ "' role='menuitem' data-value='"
-															+ $(squadList[i])
-																	.val()
-															+ "' class='squad'>"
-															+ $(squadList[i])
-																	.val();
-													templateText += "</a></li>";
-												}
-												console.log(templateText);
-												$(".squadlist").html(
-														templateText);
-												$("#dataBody").html("");
+	var ajaxChart = function(url, param,bodyId) {
+	var urlFull=url+"?"+param;
+	$.get(urlFull, function(data) {
+		var jsonData = JSON.parse(data);
+		var dataYTarget = [];
+		var dataYCurrent = [];
+		var dataYPrevious = [];
+		var dataXAxis = [];
+		var templateData = "";
+		for (i = 0; i < jsonData.length; i++) {
+			templateData += "<tr><td>" + jsonData[i].practiceName
+					+ "</td><td>4</td><td>" + jsonData[i].currentScore
+					+ "</td><td>2</td></tr>";
+			dataXAxis[i] = jsonData[i].practiceName;
+			dataYTarget[i] = 4;
+			dataYCurrent[i] = parseInt(jsonData[i].currentScore);
+			dataYPrevious[i] = 2;
+		}
+		$(bodyId).html(templateData);
+		genchart(dataYTarget, dataYCurrent, dataYPrevious, dataXAxis);
+	});
+};
+$(window).load(	function() {
+	$(".assesment").click(function() {
+		var squadList = $(this).siblings(".squadId");
+		var templateText = "";
+		$(".squadlist").html("");
+		for (i = 0; i < squadList.length; i++) {
+				templateText += "<li role='presentation'>";
+				templateText += "<a href='#' class='squadItem' data-parent='"+ $(this).attr('id')
+						     + "' role='menuitem' id='"+ $(squadList[i]).val()+ "'>"
+		   					 +"<h4 class='list-group-item-heading'>"+ $(squadList[i]).val()+"</h4>";
+				templateText += "</a></li>";
+				}
+		console.log(templateText);
+		$(".squadlist").html(templateText);
+		$("#dataBody").html("");
+		var url="getmaturityscore.wss";
+		var paramString="assesmentId="+ $(this).attr('id');
+		var templateData = "";
+		ajaxChart(url,paramString,"#dataBody");
+	});
+	
+	$(".squadlist").on('click','.squadItem',function() {
+	    console.log("testing started");
+		var dataVal = $(this).attr('id');
+		var dataParent = $(this).attr('data-parent');
+		console.log(dataVal + " "+ dataParent);
+		var url = "getsquadscore.wss";
+		var paramString="assesmentId="+ dataParent + "&squadId=" + dataVal;
+		console.log(url+" "+paramString);
+		ajaxChart(url,paramString,"#dataBody");
+		});
 
-												$
-														.get(
-																"getmaturityscore.wss?assesmentId="
-																		+ $(
-																				this)
-																				.attr(
-																						'id'),
-																function(data) {
-																	var jsonData = JSON
-																			.parse(data);
-																	var templateData = "";
-																	for (i = 0; i < jsonData.length; i++) {
-																		templateData += "<tr><td>"
-																				+ jsonData[i].practiceName
-																				+ "</td><td>4</td><td>"
-																				+ jsonData[i].currentScore
-																				+ "</td><td>2</td></tr>";
-																		dataXAxis[i] = jsonData[i].practiceName;
-																		dataYTarget[i] = 4;
-																		dataYCurrent[i] = parseInt(jsonData[i].currentScore);
-																		dataYPrevious[i] = 2;
-
-																	}
-																	$(
-																			"#dataBody")
-																			.html(
-																					templateData);
-																	genchart(
-																			dataYTarget,
-																			dataYCurrent,
-																			dataYPrevious,
-																			dataXAxis);
-																});
-											});
-							$(".squad")
-									.on("click",
-											function() {
-												var dataVal = $(this).attr(
-														'data-value');
-												var dataParent = $(this).attr(
-														'data-parent');
-												console.log(dataVal + " "
-														+ dataParent);
-												var url = "getsquadscore.wss?assesmentId="
-														+ dataParent
-														+ "&squadId=" + dataVal;
-												console.log(url);
-												$
-														.get(
-																url,
-																function(data) {
-																	var jsonData = JSON
-																			.parse(data);
-																	var templateData = "";
-																	var dataYTarget = [];
-																	var dataYCurrent = [];
-																	var dataYPrevious = [];
-																	var dataXAxis = [];
-																	for (i = 0; i < jsonData.length; i++) {
-																		templateData += "<tr><td>"
-																				+ jsonData[i].practiceName
-																				+ "</td><td>4</td><td>"
-																				+ jsonData[i].currentScore
-																				+ "</td><td>2</td></tr>";
-																		dataXAxis[i] = jsonData[i].practiceName;
-																		dataYTarget[i] = 4;
-																		dataYCurrent[i] = parseInt(jsonData[i].currentScore);
-																		dataYPrevious[i] = 2;
-																	}
-																	$(
-																			"#dataBody")
-																			.html(
-																					templateData);
-																	genchart(
-																			dataYTarget,
-																			dataYCurrent,
-																			dataYPrevious,
-																			dataXAxis);
-																});
-											});
-
-						});
+	});
 	</script>
 </body>
 </html>

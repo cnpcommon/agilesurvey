@@ -68,6 +68,7 @@ public class HomeAction implements WebActionHandler {
 		mvObject.setView("index.jsp");
 		return mvObject;
 	}
+	
 	@RequestMapping("getsquadscore.wss")
 	public ModelAndView showMaturityScorePerSquad(HttpServletRequest request,HttpServletResponse response){
 		Gson gson = new GsonBuilder().create();
