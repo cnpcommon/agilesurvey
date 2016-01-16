@@ -38,7 +38,7 @@ public class LoginAction implements WebActionHandler {
 				request.getSession()
 						.setAttribute(LOGGED_IN_USER, userDetails);
 				mvObject = new ModelAndView(ViewType.FORWARD_ACTION_VIEW);
-				if(USER_ROLE_ITERATION_MGR.equalsIgnoreCase(userDetails.getRole()))
+				if(USER_ROLE_ITERATION_MGR.equalsIgnoreCase(userDetails.getRole().trim()))
 				{
 					mvObject.setView("loadItrMgrHomeDashboard.wss");
 				}
