@@ -1,6 +1,7 @@
 <%@page language="java"
 	contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>     	
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>	
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -24,6 +25,7 @@
   	<%@include file="nav.html" %>
   	<div class="well">
   	<h1>New  Maturity Assessment Configuration </h1>
+  	<c:if test="${fn:length(squads) >0}">
   	<form class="form-horizontal" role="form" action="saveAssesmentDetails.wss" method="post" id="surveyDetailsFrm" >
   		<input type="hidden" name="assesmentId" value="" />
 	    <div class="panel panel-primary">
@@ -112,6 +114,8 @@
 		  	</div>
 		 </div>
 	</form>
+	</c:if>
+	
 	<form id="hidFrm" action="home.wss" method="post">
 	</form>
 	<div class="modal fade" id="alertModal" role="dialog">
@@ -138,6 +142,11 @@
      <script type="text/javascript">
      	var error = false;
      	$(document).ready(function(){
+     		var squadCount = $("input[type=checkbox][name=sqadList]").length;
+     		if(squadCount ==0 )
+     		{
+     			showMessage("You do not have any squad defined. Click \"Close\" to go to home page.");
+     		}
      		updateCountes();
      		
      		$('input[name=questionId][type=checkbox]').click(function(event){
@@ -187,7 +196,7 @@
      				//showMessage("Validation error");
      			}
      		});
-     	
+     		
      	});
      	function showMessage(message)
      	{
