@@ -23,42 +23,45 @@
   <body>
   	<%@include file="nav.html" %>
   	<div class="well">
-  	<h1>New  Maturity Assessment  </h1>
+  	<h1>New  Maturity Assessment Configuration </h1>
   	<form class="form-horizontal" role="form" action="saveAssesmentDetails.wss" method="post" id="surveyDetailsFrm" >
   		<input type="hidden" name="assesmentId" value="" />
 	    <div class="panel panel-primary">
 	  		<div class="panel-heading panel-primary"><b>Assessment details </b></div>
 		  	<div class="panel-body">
 					  <div class="form-group">
-					    <label class="control-label  col-sm-2" for="surveyName">Survey name</label>
+					    <label class="control-label  col-sm-2" for="surveyName">Survey name<span class="label label-danger">*</span></label>
 					    <div class="col-sm-10">
 					    <input type="text" class="form-control" id="surveyName" name="surveyName">
 					    </div>
 					  </div>
 					  <div class="form-group">
-					    <label class="control-label col-sm-2" for="releaseDate">Survey release date</label>
+					    <label class="control-label col-sm-2" for="releaseDate">Survey release date<span class="label label-danger">*</span></label>
 					    <div class="col-sm-10">
 					    	<input type="text" class="form-control" id="releaseDate" name="releaseDate">
 					    </div>
 					  </div>
 					  <div class="form-group">
-					    <label class="control-label col-sm-2" for="comment">Comment</label>
+					    <label class="control-label col-sm-2" for="comment">Comment<span class="label label-danger">*</span></label>
 					    <div class="col-sm-10">
 					    	<input type="text" class="form-control" id="comment" name="comment">
 					    </div>
 					  </div>
 					  <div class="form-group">
-					    <label class="control-label  col-sm-2" for="sqadList">Select squad</label>
+					    <label class="control-label  col-sm-2" for="sqadList">Select squad<span class="label label-danger">*</span></label>
 						    <div class="checkbox  col-sm-10">
 							  <label><input type="checkbox" value="esdw" name="sqadList">ESDW</label>
 							  <label><input type="checkbox" value="cnp1" name="sqadList">CNP1</label>
 							</div>
 					  </div>
+					  <div class="form-group">
+		  			  	<div class="col-sm-4"><span class="label label-danger">*</span> Marked fields are mandatory fields</div>
+					  </div>
 					 
 		  	</div><!--  End of panel body -->
 		</div>
 		<div class="panel panel-primary">
-	  		<div class="panel-heading panel-primary"><b>Questions setup </b> <span class="label label-warning">0 Selected</span></div>
+	  		<div class="panel-heading panel-primary"><b>Questions setup </b> <span class="label label-warning pull-right" id="totalCount">0 Selected</span></div>
 		  	<div class="panel-body">
 		  		 <!--  Adding the questions in the collapsible accordian -->
 		  		 <div class="panel-group" id="accordion">
@@ -85,7 +88,7 @@
 														<a data-toggle="collapse" href="#${indicatorMap.levelIndicatorMap[levelValueStr].questionid}"><c:out value="${level.name}" /></a>
 													</h4>
 													</div>
-													<div id="${indicatorMap.levelIndicatorMap[levelValueStr].questionid}" class="panel-collapse collapse">
+													<div id="${indicatorMap.levelIndicatorMap[levelValueStr].questionid}" class="panel-collapse collapse in">
 														<div class="panel-body">
 															<c:out value="${indicatorMap.levelIndicatorMap[levelValueStr].indicatorText }" escapeXml="false"/>
 														</div>
@@ -102,8 +105,9 @@
 		  		 	
 		  		 	</c:forEach>
 		  		 </div><!--  End of accordian -->
-		  		 <div class="col-sm-10">&nbsp;</div>
-				<div class="col-sm-2"><button type="button" class="btn btn-primary btn-lg" id="saveAndReleaseBtn">Save & Release</button></div>
+		  		 <div class="col-sm-8">&nbsp;</div>
+		  		 <div class="col-sm-2"><button type="button" class="btn btn-default btn-lg pull-right" id="selectAllBtn"><span class="glyphicon glyphicon-saved"></span>&nbsp;Select All</button></div>
+				 <div class="col-sm-2"><button type="button" class="btn btn-primary btn-lg" id="saveAndReleaseBtn"><span class="glyphicon glyphicon-floppy-disk"></span>&nbsp;Save & Release</button></div>
 		  	</div>
 		 </div>
 	</form>
@@ -133,7 +137,20 @@
      <script type="text/javascript">
      	var error = false;
      	$(document).ready(function(){
-     	
+     		updateCountes();
+     		
+     		$('input[name=questionId][type=checkbox]').click(function(event){
+     		
+				updateCountes();
+     		});
+     		$('#selectAllBtn').click(function(event) {  //on click
+				
+					$('input[name=questionId][type=checkbox]').each(function() { //loop through each checkbox
+						this.checked = true;               
+					});
+					updateCountes();
+				
+			});
      		$('#alertModal').on('hidden.bs.modal', function () {
     				// do something
     				if(!error)
@@ -166,7 +183,7 @@
      			else
      			{
      				error = true;
-     				showMessage("Validation error");
+     				//showMessage("Validation error");
      			}
      		});
      	
@@ -180,8 +197,36 @@
      	}
      	function validateForm()
      	{
-     		//TODO: Form validation 
+     		//TODO: Form validation
+     		error = true;
+     		var name = $("#surveyName").val();
+     		var rDate  = $("#releaseDate").val();
+     		var cmt = $("#comment").val();
+   			if(name == "" || rDate== "" || cmt == "")
+   			{
+   				showMessage("All <span class=\"label label-danger\">*</span> fields are manadatory");
+   				return false;
+   			}
+     		var n = $("input[type=checkbox]:checked").length;
+     		if(n==0)
+     		{
+     			showMessage("Please select at least one Squad from the list");
+   				return false;
+     		}
+     		 n = $("input[name=questionId][type=checkbox]:checked").length;
+     		if(n==0)
+     		{
+     			showMessage("Please select at least one Practice Question from the list");
+   				return false;
+     		}
+     		error = false; 
      		return true;
+     	}
+     	
+     	function updateCountes()
+     	{
+     		var n = $( "input[name=questionId][type=checkbox]:checked" ).length;
+			$("#totalCount").html(n+ " items selected");
      	}
      </script>
   </body>
