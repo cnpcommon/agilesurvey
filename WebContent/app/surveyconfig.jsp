@@ -1,6 +1,7 @@
 <%@page language="java"
 	contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>     	
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>	
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -12,6 +13,7 @@
 
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/datepicker.css" rel="stylesheet" >
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -24,6 +26,7 @@
   	<%@include file="nav.html" %>
   	<div class="well">
   	<h1>New  Maturity Assessment Configuration </h1>
+  	<c:if test="${fn:length(squads) >0}">
   	<form class="form-horizontal" role="form" action="saveAssesmentDetails.wss" method="post" id="surveyDetailsFrm" >
   		<input type="hidden" name="assesmentId" value="" />
 	    <div class="panel panel-primary">
@@ -38,7 +41,7 @@
 					  <div class="form-group">
 					    <label class="control-label col-sm-2" for="releaseDate">Survey release date<span class="label label-danger">*</span></label>
 					    <div class="col-sm-10">
-					    	<input type="text" class="form-control" id="releaseDate" name="releaseDate">
+          					<input  type="text" placeholder="mm/dd/yyyy"  id="releaseDate" name="releaseDate">
 					    </div>
 					  </div>
 					  <div class="form-group">
@@ -50,8 +53,9 @@
 					  <div class="form-group">
 					    <label class="control-label  col-sm-2" for="sqadList">Select squad<span class="label label-danger">*</span></label>
 						    <div class="checkbox  col-sm-10">
-							  <label><input type="checkbox" value="esdw" name="sqadList">ESDW</label>
-							  <label><input type="checkbox" value="cnp1" name="sqadList">CNP1</label>
+						     <c:forEach items="${squads}" var="squad">
+							     <label><input type="checkbox" value="${squad}" name="sqadList"><c:out value="${squad}" /></label>
+						     </c:forEach>
 							</div>
 					  </div>
 					  <div class="form-group">
@@ -111,6 +115,8 @@
 		  	</div>
 		 </div>
 	</form>
+	</c:if>
+	
 	<form id="hidFrm" action="home.wss" method="post">
 	</form>
 	<div class="modal fade" id="alertModal" role="dialog">
@@ -133,12 +139,21 @@
     <script src="js/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="js/bootstrap.min.js"></script>
+    <script src="js/datepicker.js"></script>
     
      <script type="text/javascript">
      	var error = false;
      	$(document).ready(function(){
+     		var squadCount = $("input[type=checkbox][name=sqadList]").length;
+     		if(squadCount ==0 )
+     		{
+     			showMessage("You do not have any squad defined. Click \"Close\" to go to home page.");
+     		}
      		updateCountes();
-     		
+     		//Initialize the datepicker 
+     		 $('#releaseDate').datepicker({
+                    format: "mm/dd/yyyy"
+                }); 
      		$('input[name=questionId][type=checkbox]').click(function(event){
      		
 				updateCountes();
@@ -186,7 +201,7 @@
      				//showMessage("Validation error");
      			}
      		});
-     	
+     		
      	});
      	function showMessage(message)
      	{

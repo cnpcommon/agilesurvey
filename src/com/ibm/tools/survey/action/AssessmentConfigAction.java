@@ -9,6 +9,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import sun.security.action.GetLongAction;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.ibm.app.web.frmwk.WebActionHandler;
@@ -16,6 +18,7 @@ import com.ibm.app.web.frmwk.annotations.RequestMapping;
 import com.ibm.app.web.frmwk.bean.ModelAndView;
 import com.ibm.app.web.frmwk.bean.ViewType;
 import com.ibm.tools.survey.bean.AssesmentDetails;
+import com.ibm.tools.survey.bean.MaturityAssesmentUser;
 import com.ibm.tools.survey.bean.MaturityIndicator;
 import com.ibm.tools.survey.bean.MaturityIndicatorAccumulator;
 import com.ibm.tools.survey.bean.MaturityIndicatorInfoMap;
@@ -143,19 +146,18 @@ public class AssessmentConfigAction implements WebActionHandler {
 	@RequestMapping("loadAssesmentConfig.wss")
 	public ModelAndView loadConfig(HttpServletRequest request,
 			HttpServletResponse response) {
+		SurveyConfigDAO daoObject = new SurveyConfigDAO();
 		ModelAndView mvObject = new ModelAndView(ViewType.JSP_VIEW);
-		// Gson serializer = new GsonBuilder().create();
-
-		// TODO: Change the above item
 		mvObject.addModel("principleMap",
 				CachedReferenceDataStore.getAgilePrinciplesMap());
 		mvObject.addModel("practiceMap",
 				CachedReferenceDataStore.getAgilePracticeMap());
 		mvObject.addModel("levels", CachedReferenceDataStore.getLevels());
+		mvObject.addModel("squads",getSquadList(request, daoObject));
 		MaturityIndicatorAccumulator accumulator = new MaturityIndicatorAccumulator();
 
 		mvObject.addModel("indicatorList", accumulator
-				.getAccumulatedList((new SurveyConfigDAO().getAllTypes(
+				.getAccumulatedList((daoObject.getAllTypes(
 						MaturityIndicator.TYPE, MaturityIndicator.class))));
 		request.getSession().setAttribute(INDICATOR_MAP_SESSION_KEY,
 				accumulator);
@@ -170,13 +172,11 @@ public class AssessmentConfigAction implements WebActionHandler {
 		AssesmentDetails assesmentDetails = buildNewAssesment(request);
 		Gson serializer = new GsonBuilder().create();
 		if (assesmentDetails != null) {
-			if((new SurveyConfigDAO()).updateAssesmentDetails(assesmentDetails))
-			{
+			if ((new SurveyConfigDAO())
+					.updateAssesmentDetails(assesmentDetails)) {
 				mvObject.setView("{ \"status\" :  \"0\" , \"payload\" : "
-					+ serializer.toJson(assesmentDetails) + "}");
-			}
-			else
-			{
+						+ serializer.toJson(assesmentDetails) + "}");
+			} else {
 				mvObject.setView("{ \"status\" :  \"1\" , \"errorMessage\" : "
 						+ "Could not save the assesment" + "}");
 			}
@@ -223,6 +223,25 @@ public class AssessmentConfigAction implements WebActionHandler {
 
 	private String getSafeString(String input) {
 		return (input != null ? input.trim() : "");
+	}
+
+	private List<String> getSquadList(HttpServletRequest request,
+			SurveyConfigDAO daoObj) {
+		UserDetails userDetails = (UserDetails) request.getSession()
+				.getAttribute("LOGGED_IN_USER");
+		;
+		if (userDetails != null) {
+			String userId = userDetails.getEmailId();
+			MaturityAssesmentUser hiararchyDetails = daoObj
+					.getMatutiryAssessmentInfoForUser(userId);
+			if (hiararchyDetails != null
+					&& hiararchyDetails.getSquardIds() != null) {
+					return hiararchyDetails.getSquardIds();
+
+			}
+
+		}
+		return new ArrayList<String>();
 	}
 
 }

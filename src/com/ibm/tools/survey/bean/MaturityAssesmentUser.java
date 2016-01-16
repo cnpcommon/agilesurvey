@@ -13,6 +13,7 @@ public class MaturityAssesmentUser {
 	private String reportes;
 	private List<String> tribes;
 	private String type=TYPE;
+	private List<String> squardIds;
 			
 	public String getType() {
 		return type;
@@ -61,6 +62,18 @@ public class MaturityAssesmentUser {
 	}
 	public void setReportes(String reportes) {
 		this.reportes = reportes;
+	}
+	/**
+	 * @return the squardIds
+	 */
+	public List<String> getSquardIds() {
+		return squardIds;
+	}
+	/**
+	 * @param squardIds the squardIds to set
+	 */
+	public void setSquardIds(List<String> squardIds) {
+		this.squardIds = squardIds;
 	}
 	
 	

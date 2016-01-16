@@ -24,11 +24,11 @@
 
 		<div class="container">
 		<div class="page-header">
-			<h1>Description</h1>
+			<h1>Agile Maturity Survey Tool ( Version : 0.1)</h1>
 		</div>
 		<div class="jumbotron">
 			<h2>Agile Maturity Survey Tool</h2>
-			<p> Home page conetent</p>
+			<p> Home page content</p>
 		</div>
 	</div>
 
