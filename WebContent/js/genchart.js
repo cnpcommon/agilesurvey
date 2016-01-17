@@ -14,8 +14,12 @@ var genchart = function(dataYTarget, dataYActual, dataYPrevious, dataXAxis) {
 						},
 
 						title : {
-							text : 'Target vs Current vs Previous',
-							x : -80
+							text : 'Agile Leadership and Collaboration Assessment <br/>Summary',
+							style: {
+				                color: '#000000',
+				                fontWeight: 'bold',
+				                fontSize : '12px'
+				            }
 						},
 
 						pane : {
@@ -40,10 +44,8 @@ var genchart = function(dataYTarget, dataYActual, dataYPrevious, dataXAxis) {
 						},
 
 						legend : {
-							align : 'right',
-							verticalAlign : 'top',
-							y : 70,
-							layout : 'vertical'
+							align : 'center',
+							layout : 'horizontal'
 						},
 
 						series : [ {

@@ -6,12 +6,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import sun.security.action.GetLongAction;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.ibm.app.web.frmwk.WebActionHandler;
 import com.ibm.app.web.frmwk.annotations.RequestMapping;
 import com.ibm.app.web.frmwk.bean.ModelAndView;
 import com.ibm.app.web.frmwk.bean.ViewType;
+import com.ibm.tools.survey.bean.ApplicationConstants;
 import com.ibm.tools.survey.bean.AssesmentDetails;
 import com.ibm.tools.survey.bean.AssessmentResult;
 import com.ibm.tools.survey.bean.UserDetails;
@@ -24,7 +27,16 @@ public class HomeAction implements WebActionHandler {
 	public ModelAndView loadHome(HttpServletRequest request,
 			HttpServletResponse response) {
 		ModelAndView mvObject = new ModelAndView(ViewType.JSP_VIEW);
-		mvObject.setView("app/newhome.jsp");
+		UserDetails userDetails = getLoggedInUser(request);
+		if(userDetails!=null && ApplicationConstants.USER_ROLE_ITERATION_MGR.equalsIgnoreCase(userDetails.getRole()))
+		{
+			mvObject = new ModelAndView(ViewType.FORWARD_ACTION_VIEW);
+			mvObject.setView("loadItrMgrHomeDashboard.wss");
+		}
+		else
+		{
+			mvObject.setView("app/newhome.jsp");
+		}
 		return mvObject;
 	}
 
@@ -47,8 +59,6 @@ public class HomeAction implements WebActionHandler {
 	public ModelAndView showMaturityScore(HttpServletRequest request,
 			HttpServletResponse response) {
 		Gson gson = new GsonBuilder().create();
-		UserDetails usrDetails = (UserDetails) request.getSession()
-				.getAttribute("LOGGED_IN_USER");
 		String assesmentId = request.getParameter("assesmentId");
 		ModelAndView mvObject = new ModelAndView(ViewType.AJAX_VIEW);
 		List<AssessmentResult> listOfResults = new ResultScoreDAO()
@@ -73,12 +83,17 @@ public class HomeAction implements WebActionHandler {
 	public ModelAndView showMaturityScorePerSquad(HttpServletRequest request,HttpServletResponse response){
 		Gson gson = new GsonBuilder().create();
 		ModelAndView mvObject = new ModelAndView(ViewType.AJAX_VIEW);
-		UserDetails usrDetails = (UserDetails) request.getSession()
-				.getAttribute("LOGGED_IN_USER");
 		String assesmentId = request.getParameter("assesmentId");
 		String squadId=request.getParameter("squadId");
 		List<AssessmentResult> listOfResults=new ResultScoreDAO().getResultSquadWise(assesmentId, squadId);
 		mvObject.setView(gson.toJson(listOfResults));
 		return mvObject;
+	}
+	
+	private UserDetails getLoggedInUser(HttpServletRequest request)
+	{
+		UserDetails usrDetails = (UserDetails) request.getSession()
+				.getAttribute(ApplicationConstants.LOGGED_IN_USER);
+		return usrDetails;
 	}
 }
