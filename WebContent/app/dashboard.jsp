@@ -25,21 +25,20 @@
 	<div class="container" style="padding-right: 10%;">
 		<h2>Agile Team Maturity Dashboard</h2>
 		<div class="row">
-			<div class="col-sm-3">
+			<%-- 			<div class="col-sm-3">
 				<div class="wall">
 					<div class="panel panel-primary">
 						<div class="panel-heading">Assesment List</div>
 						<div class="panel-body">
-						  <%-- <select>
+						  <select>
 						    <c:forEach var="item" items="${assesmentDetails}">
-						      <option id="${item.assessementId}" class="assesment">${item.name}
-						      <p>(${item.releaseDate})</p>
+						      <option id="${item.assessementId}" class="assesment">${item.name}-${item.releaseDate}
 						     <c:forEach var="squad" items="${item.squadList}">
 								<input type="hidden" class="squadId" value="${squad}" />
 							 </c:forEach>
 							</option>
 						    </c:forEach> 
-						  </select>--%>
+						  </select>
 						  <div class="dropdown">
 							<button class="btn btn-primary dropdown-toggle" id="menu1"
 								type="button" data-toggle="dropdown">
@@ -59,51 +58,91 @@
 								</c:forEach>
 							</ul>
 							</div>
-							<%-- <div class="list-group">
-								<c:forEach var="item" items="${assesmentDetails}">
-									<a href="#" id="${item.assessementId}"
-										class="list-group-item assesment">
-										<h4 class="list-group-item-heading">${item.name}</h4>
-										<p class="list-group-item-text">Released :
-											${item.releaseDate}</p>
-									</a>
-									<c:forEach var="squad" items="${item.squadList}">
-										<input type="hidden" name="squadId" value="${squad}" />
-									</c:forEach>
-								</c:forEach>
-							      </div> --%>
+							
 						</div>
 					</div>
 					<div>
 						<div class="panel panel-primary">
 							<div class="panel-heading">Squad List</div>
 							<div class="panel-body">
-							<div class="dropdown">
+<!-- 							<div class="dropdown">
 								<button class="btn btn-primary dropdown-toggle" id="menu2"
 									type="button" data-toggle="dropdown">
 									Select Squad <span class="caret"></span>
 								</button>
-								<!-- <ul class="dropdown-menu squadlist" role="menu"
-									aria-labelledby="menu2"> -->
+								
                                 <ul class="dropdown-menu squadlist">
 
 								</ul>
-								</div>
+							</div> -->
+							
 							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-			<div class="col-sm-9">
-				<div class="wall" style="width: 120%;">
-					<div class="panel panel-primary">
-						<div class="panel-heading">Maturity Metrics</div>
-						<div class="panel-body">
-							<div class="row">
-								<div class="col-sm-5">
-									<div class="panel panel-primary">
-										<div class="panel-heading">Assesment Results</div>
-										<div class="panel-body">
+			</div> --%>
+			<div class="col-sm-12">
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<div
+							style="text-align: center; font-size: 1.2em; font-weight: bold;">
+							<span>Agile Team Maturity Dashboard</span>
+						</div>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-sm-6">
+								<label>Select Assesment</label>
+								<select id="assesmentList">
+									<c:forEach var="item" items="${assesmentDetails}">
+										<option id="${item.assessementId}" class="assesment" 
+										data-child='${item.squadList}'>${item.name}-${item.releaseDate}										
+										</option>
+									</c:forEach>
+								</select>
+							</div>
+							<div class="col-sm-6">
+								<label>Select Squad</label> 
+								<select class="squadlist">
+                                  
+								</select>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-12">
+								<div class="panel panel-primary">
+									<div class="panel-heading"></div>
+									<div class="panel-body">
+										<div class="col-sm-5">
+											<table class="table table-bordered small">
+												<tbody>
+													<tr>
+														<td><strong>Executive Leader:</strong></td>
+														<td>XXXXX</td>
+
+													</tr>
+													<tr>
+														<td><strong>Domain:</strong></td>
+														<td class="success">XXXXX</td>
+													</tr>
+													<tr>
+														<td><strong>Subdomain Leader:</strong></td>
+														<td class="success">XXXXX</td>
+													</tr>
+													<tr>
+														<td><strong>Team name:</strong></td>
+														<td class="success" id="teamName">XXXXX</td>
+													</tr>
+													<tr>
+														<td><strong>Team size:</strong></td>
+														<td class="success">XXXXX</td>
+													</tr>
+													<tr>
+														<td><strong>Assessment Type:</strong></td>
+														<td class="success">Regular</td>
+													</tr>
+												</tbody>
+											</table>
 											<table class="table table-bordered table-striped">
 												<thead>
 													<tr>
@@ -117,25 +156,31 @@
 
 												</tbody>
 											</table>
+
 										</div>
-									</div>
-								</div>
-								<div class="col-sm-7">
-									<div class="panel panel-primary">
-										<div class="panel-heading">Agile Leadership and
-											Collaboration Assessment Summary</div>
-										<div class="panel-body">
+										<div class="col-sm-7 text-center">
+											<div class="form-group text-center">
+												<label>Agile Leadership and Collaboration Assessment
+													Summary</label>
+											</div>
 											<div id="container"></div>
+
+
 										</div>
 									</div>
 								</div>
 							</div>
 
-
 						</div>
 					</div>
+					<!-- </div> -->
+
+
+
+
 				</div>
 			</div>
+
 		</div>
 	</div>
 
@@ -148,61 +193,88 @@
 	<script src="js/highcharts-more.js"></script>
 	<script src="js/genchart.js"></script>
 	<script>
-	var ajaxChart = function(url, param,bodyId) {
-	var urlFull=url+"?"+param;
-	$.get(urlFull, function(data) {
-		var jsonData = JSON.parse(data);
-		var dataYTarget = [];
-		var dataYCurrent = [];
-		var dataYPrevious = [];
-		var dataXAxis = [];
-		var templateData = "";
-		for (i = 0; i < jsonData.length; i++) {
-			templateData += "<tr><td>" + jsonData[i].practiceName
-					+ "</td><td>4</td><td>" + jsonData[i].currentScore
-					+ "</td><td>2</td></tr>";
-			dataXAxis[i] = jsonData[i].practiceName;
-			dataYTarget[i] = 4;
-			dataYCurrent[i] = parseInt(jsonData[i].currentScore);
-			dataYPrevious[i] = 2;
-		}
-		$(bodyId).html(templateData);
-		genchart(dataYTarget, dataYCurrent, dataYPrevious, dataXAxis);
-	});
-};
-$(window).load(	function() {
-	$(".assesment").click(function() {
-		var squadList = $(this).siblings(".squadId");
-		var templateText = "";
-		$(".squadlist").html("");
-		for (i = 0; i < squadList.length; i++) {
-				templateText += "<li role='presentation'>";
-				templateText += "<a href='#' class='squadItem' data-parent='"+ $(this).attr('id')
-						     + "' role='menuitem' id='"+ $(squadList[i]).val()+ "'>"
-		   					 +"<h4 class='list-group-item-heading'>"+ $(squadList[i]).val()+"</h4>";
-				templateText += "</a></li>";
+		var ajaxChart = function(url, param, bodyId) {
+			var urlFull = url + "?" + param;
+			$.get(urlFull, function(data) {
+				var jsonData = JSON.parse(data);
+				var dataYTarget = [];
+				var dataYCurrent = [];
+				var dataYPrevious = [];
+				var dataXAxis = [];
+				var templateData = "";
+				if(jsonData.length){
+				for (i = 0; i < jsonData.length; i++) {
+				 var currentVal=parseInt(jsonData[i].currentScore);
+					templateData += "<tr><td>" + jsonData[i].practiceName
+							+ "</td><td>4</td><td>" + currentVal
+							+ "</td><td>2</td></tr>";
+					dataXAxis[i] = jsonData[i].practiceName;
+					dataYTarget[i] = 4;
+					dataYCurrent[i] = currentVal;
+					dataYPrevious[i] = 2;
 				}
-		console.log(templateText);
-		$(".squadlist").html(templateText);
-		$("#dataBody").html("");
-		var url="getmaturityscore.wss";
-		var paramString="assesmentId="+ $(this).attr('id');
-		var templateData = "";
-		ajaxChart(url,paramString,"#dataBody");
-	});
-	
-	$(".squadlist").on('click','.squadItem',function() {
-	    console.log("testing started");
-		var dataVal = $(this).attr('id');
-		var dataParent = $(this).attr('data-parent');
-		console.log(dataVal + " "+ dataParent);
-		var url = "getsquadscore.wss";
-		var paramString="assesmentId="+ dataParent + "&squadId=" + dataVal;
-		console.log(url+" "+paramString);
-		ajaxChart(url,paramString,"#dataBody");
-		});
+				genchart(dataYTarget, dataYCurrent, dataYPrevious, dataXAxis);
+				}
+				else
+				{
+				 templateData="No data found";
+				 $("#container").html("No data found - Not able to generate graph");
+				}
+				$(bodyId).html(templateData);
+				
+			});
+		};
 
-	});
+		var selectClick = function(id) {
+		    var dataChild=$("#"+id).attr('data-child'); 
+			var squadList = dataChild.substring(1,dataChild.length-1).split(',');
+			var templateText="<option>Select squad</option>";
+			for (i = 0; i < squadList.length; i++) {
+				templateText += "<option class='squadItem' data-parent='"
+						+ id + "' role='menuitem' id='"
+						+ squadList[i] + "'>"+ squadList[i] + "</option>";
+			}
+			console.log(templateText);
+			$(".squadlist").html(templateText);
+			$("#dataBody").html("");
+			var url = "getmaturityscore.wss";
+			var paramString = "assesmentId=" + $("#"+id).attr('id');
+			var templateData = "";
+			ajaxChart(url, paramString, "#dataBody");
+
+		};
+
+		$(window)
+				.load(
+						function() {
+
+                            selectClick($("#assesmentList .assesment:first-child").attr('id'));
+							$(".assesment").click(function(){
+							selectClick($(this).attr('id'));
+							});
+
+							$(".squadlist")
+									.on('click','.squadItem',
+											function() {
+												console.log("testing started");
+												var dataVal = $(this)
+														.attr('id');
+												$("#teamName").html(dataVal);		
+												var dataParent = $(this).attr(
+														'data-parent');
+												console.log(dataVal + " "
+														+ dataParent);
+												var url = "getsquadscore.wss";
+												var paramString = "assesmentId="
+														+ dataParent
+														+ "&squadId=" + dataVal;
+												console.log(url + " "
+														+ paramString);
+												ajaxChart(url, paramString,
+														"#dataBody");
+											});
+
+						});
 	</script>
 </body>
 </html>

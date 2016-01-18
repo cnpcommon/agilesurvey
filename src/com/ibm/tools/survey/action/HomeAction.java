@@ -48,8 +48,7 @@ public class HomeAction implements WebActionHandler {
 	@RequestMapping("gendashboard.wss")
 	public ModelAndView loadDashboard(HttpServletRequest request,
 			HttpServletResponse response) {
-		UserDetails usrDetails = (UserDetails) request.getSession()
-				.getAttribute("LOGGED_IN_USER");
+		UserDetails usrDetails = getLoggedInUser(request);
 		List<AssesmentDetails> filteredAssesmentDetails = new SurveyConfigDAO()
 				.getAssesmentsByOwner(usrDetails.getEmailId());
 
