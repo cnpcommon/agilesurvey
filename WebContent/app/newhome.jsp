@@ -20,15 +20,15 @@
     <![endif]-->
 </head>
 <body>
-<%@include file="nav.html" %>
+<%@include file="nav.jsp" %>
 
 		<div class="container">
 		<div class="page-header">
 			<h1>Agile Maturity Survey Tool ( Version : 0.1)</h1>
 		</div>
 		<div class="jumbotron">
-			<h2>Agile Maturity Survey Tool</h2>
-			<p> Home page content</p>
+			<span class="lead">Click on the following button to take assesment assigned to you</span>
+			<p><a href="loadSurvey.wss" role="button" class="btn btn-lg btn-danger"><span class="glyphicon glyphicon-list">&nbsp;</span>Take assessment</a></p>
 		</div>
 	</div>
 

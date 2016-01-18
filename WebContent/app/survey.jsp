@@ -22,7 +22,7 @@
     <![endif]-->
   </head>
   <body>
-  	<%@include file="nav.html" %>
+  	<%@include file="nav.jsp" %>
   	<div class="well">
   	<h1>Maturity Assessment ${assesment.name} dated ${assesment.releaseDate}  </h1>
   	<form class="form-horizontal" role="form" action="saveSurveyResults.wss" method="post" id="surveyDetailsFrm" >
@@ -68,7 +68,7 @@
 						      		</c:forEach>
 						      		<!--  Now adding do not know or NA -->
 						      		 <div class="panel-group">
-									  <div class="panel panel-default">
+									  <div class="panel panel-warning">
 									    <div class="panel-heading">
 									      <h4 class="panel-title">
 									        <label>Do not know</label>
@@ -78,11 +78,11 @@
 									  </div>
 									 </div>
 						      		<div class="panel-group">
-									  <div class="panel panel-default">
+									  <div class="panel panel-warning">
 									    <div class="panel-heading">
 									      <h4 class="panel-title">
 									        <label>Not applicable</label> 
-									        <span class="pull-right" >Select&nbsp;<input type="radio" name="${indicatorMap.itemId}" value="-1" /></span>
+									        <span class="pull-right" >Select&nbsp;<input type="radio" name="${indicatorMap.itemId}" value="0" /></span>
 									      </h4>
 									    </div>
 									  </div>

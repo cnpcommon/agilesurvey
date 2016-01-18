@@ -23,7 +23,7 @@
     <![endif]-->
   </head>
   <body>
-  	<%@include file="nav.html" %>
+  	<%@include file="nav.jsp" %>
   	<div class="well">
   	<h1>New  Maturity Assessment Configuration </h1>
   	<c:if test="${fn:length(squads) >0}">

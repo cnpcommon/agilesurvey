@@ -21,7 +21,7 @@
     <![endif]-->
   </head>
   <body>
-  	<%@include file="nav.html" %>
+  	<%@include file="nav.jsp" %>
   	<div class="well">
   	<h1>Practice setup </h1>
 	    <div class="panel panel-primary">

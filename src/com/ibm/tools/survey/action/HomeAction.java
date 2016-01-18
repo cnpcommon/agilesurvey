@@ -33,6 +33,11 @@ public class HomeAction implements WebActionHandler {
 			mvObject = new ModelAndView(ViewType.FORWARD_ACTION_VIEW);
 			mvObject.setView("loadItrMgrHomeDashboard.wss");
 		}
+		else if(userDetails!=null && ApplicationConstants.USER_ROLE_TRIBE_MANAGER.equalsIgnoreCase(userDetails.getRole()))
+		{
+			mvObject = new ModelAndView(ViewType.FORWARD_ACTION_VIEW);
+			mvObject.setView("gendashboard.wss");
+		}
 		else
 		{
 			mvObject.setView("app/newhome.jsp");

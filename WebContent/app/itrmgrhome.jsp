@@ -21,7 +21,7 @@
     <![endif]-->
 </head>
 <body>
-		<%@include file="nav.html" %>
+		<%@include file="nav.jsp" %>
 		<div class="container">
 		<div class="page-header" style="margin-top:-40px;">
 			<h3>Agile Maturity Survey Tool ( Version : 0.1)</h3>

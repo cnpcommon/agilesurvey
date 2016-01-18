@@ -1,3 +1,7 @@
+<%@page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
 <nav class="navbar navbar-default">
 	<div class="container-fluid">
 		<div class="navbar-header">
@@ -14,6 +18,7 @@
 
 				<li class="active" id="menuitem1"><a href="home.wss"><span
 						class="glyphicon glyphicon-home"></span> Home</a></li>
+				<c:if test="${sessionScope.LOGGED_IN_USER.role == 'tribe_manager' }" >		
 				<li class="dropdown" id="menuitem2"><a class="dropdown-toggle"
 					data-toggle="dropdown" href="#">Survey Administration<span
 						class="caret"></span></a>
@@ -23,7 +28,10 @@
 								Practices</a></li>
 						<li><a href="gendashboard.wss">View Dashboard</a></li>
 					</ul></li>
-				<li id="menuitem3"><a href="loadSurvey.wss">Take Assessment</a></li>
+				</c:if>	
+				<c:if test="${sessionScope.LOGGED_IN_USER.role != 'tribe_manager' }" >		
+					<li id="menuitem3"><a href="loadSurvey.wss">Take Assessment</a></li>
+				</c:if>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
 				<li><a href="logout.wss"><span class="glyphicon glyphicon-off"></span>
