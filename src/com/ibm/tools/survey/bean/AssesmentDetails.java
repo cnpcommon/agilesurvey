@@ -1,5 +1,6 @@
 package com.ibm.tools.survey.bean;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -10,6 +11,7 @@ public class AssesmentDetails implements Persistable{
 
 	public static final String TYPE="assesment_details";
 	private ObjectId _id;
+	private static final SimpleDateFormat DT_FMT = new SimpleDateFormat("YYYYMMddHHmmssssSSS");
 
 	private String type = TYPE ;
 	
@@ -20,7 +22,7 @@ public class AssesmentDetails implements Persistable{
 	private String releaseDate;
 	private String comment;
 	private List<MaturityIndicatorInfoMap> indicatorMap;
-	private Date dateModified;
+	private String dateModified;
 	private boolean disabled;
 	
 	
@@ -35,7 +37,7 @@ public class AssesmentDetails implements Persistable{
 		this.releaseDate = releaseDate;
 		this.comment = comment;
 		this.indicatorMap = new ArrayList<>();
-		this.dateModified = new Date(System.currentTimeMillis());
+		this.dateModified = DT_FMT.format(new Date(System.currentTimeMillis()));
 	}
 
 	/**
@@ -55,7 +57,7 @@ public class AssesmentDetails implements Persistable{
 		this.releaseDate = releaseDate;
 		this.comment = comment;
 		this.indicatorMap = indicatorMap;
-		this.dateModified = new Date(System.currentTimeMillis());
+		this.dateModified = DT_FMT.format(new Date(System.currentTimeMillis()));
 	}
 	/**
 	 * @return the type
@@ -157,15 +159,16 @@ public class AssesmentDetails implements Persistable{
 	 * @return the dateModified
 	 */
 
-	public Date getDateModified() {
+	public String getDateModified() {
 		return dateModified;
 	}
 	/**
 	 * @param dateModified the dateModified to set
 	 */
-	public void setDateModified(Date dateModified) {
+	public void setDateModified(String dateModified) {
 		this.dateModified = dateModified;
 	}
+	
 	/**
 	 * @param _id the _id to set
 	 */
