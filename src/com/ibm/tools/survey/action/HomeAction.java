@@ -88,7 +88,7 @@ public class HomeAction implements WebActionHandler {
 		Gson gson = new GsonBuilder().create();
 		ModelAndView mvObject = new ModelAndView(ViewType.AJAX_VIEW);
 		String assesmentId = request.getParameter("assesmentId");
-		String squadId=request.getParameter("squadId");
+		String squadId=request.getParameter("squadId").trim();
 		List<AssessmentResult> listOfResults=new ResultScoreDAO().getResultSquadWise(assesmentId, squadId);
 		mvObject.setView(gson.toJson(listOfResults));
 		return mvObject;

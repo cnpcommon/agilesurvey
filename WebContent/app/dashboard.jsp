@@ -204,13 +204,13 @@
 				var templateData = "";
 				if(jsonData.length){
 				for (i = 0; i < jsonData.length; i++) {
-				 var currentVal=parseInt(jsonData[i].currentScore);
+				 var currentVal=parseFloat(jsonData[i].currentScore).toFixed(1);
 					templateData += "<tr><td>" + jsonData[i].practiceName
 							+ "</td><td>4</td><td>" + currentVal
 							+ "</td><td>2</td></tr>";
 					dataXAxis[i] = jsonData[i].practiceName;
 					dataYTarget[i] = 4;
-					dataYCurrent[i] = currentVal;
+					dataYCurrent[i] =parseFloat(jsonData[i].currentScore);
 					dataYPrevious[i] = 2;
 				}
 				genchart(dataYTarget, dataYCurrent, dataYPrevious, dataXAxis);

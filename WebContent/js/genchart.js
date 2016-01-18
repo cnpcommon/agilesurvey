@@ -40,7 +40,7 @@ var genchart = function(dataYTarget, dataYActual, dataYPrevious, dataXAxis) {
 
 						tooltip : {
 							shared : true,
-							pointFormat : '<span style="color:{series.color}">{series.name}: <b>{point.y:,.0f}</b><br/>'
+							pointFormat : '<span style="color:{series.color}">{series.name}: <b>{point.y:,.1f}</b><br/>'
 						},
 
 						legend : {

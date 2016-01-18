@@ -217,11 +217,11 @@
 			
 			for (i = 0; i < jsonData.length; i++) {
 				templateData += "<tr><td>" + jsonData[i].practiceName
-						+ "</td><td>4</td><td>" + jsonData[i].currentScore
+						+ "</td><td>4</td><td>" + parseFloat(jsonData[i].currentScore).toFixed(1)
 						+ "</td><td>2</td></tr>";
 				dataXAxis[i] = jsonData[i].practiceName;
 				dataYTarget[i] = 4;
-				dataYCurrent[i] = parseInt(jsonData[i].currentScore);
+				dataYCurrent[i] =  parseFloat(jsonData[i].currentScore);
 				dataYPrevious[i] = 2;
 			}
 			$("#dataBody").html(templateData);
